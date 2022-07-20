@@ -1,5 +1,4 @@
-## Melodi:
-### Der bor en bager
+Melodi: Der bor en bager
 
 ```
 Der bor en bager
