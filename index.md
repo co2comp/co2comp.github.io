@@ -1,6 +1,7 @@
 ## Melodi:
 ### Der bor en bager
 
+```
 Der bor en bager
 på Nørregade,
 han bager kringler
@@ -18,3 +19,4 @@ så har du penge,
 så kan du få,
 men har du ingen,
 så må du gå.
+```
