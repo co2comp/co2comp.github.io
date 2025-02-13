@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CO₂-beregner</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 0;
+      background-color: #f3f3f3;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .container {
+      background-color: white;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 20px;
+    }
+    h1, h2, h3 {
+      text-align: center;
+      color: #333;
+    }
+    h3 {
+      cursor: pointer;
+    }
+    label {
+      display: block;
+      margin-bottom: 0px;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box; /* Ensure padding is included in the width */
+    }
+    input[type="number"] {
+      -moz-appearance: textfield; /* Remove number input arrows in Firefox */
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .result {
+      font-size: 1.2em;
+      text-align: center;
+    }
+    .payment-button {
+      background-color: #6772e5;
+    }
+    #paymentDiv {
+      text-align: center;
+    }
+    .bold-money {
+      font-weight: bold;
+      font-size: 1.5em;
+      margin-top: 10px;
+      color: #4CAF50;
+    }
+    .explanation {
+      font-size: 0.9em;
+      background-color: #e9e9e9;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 20px;
+    }
+    #costDisplay {
+      text-align: center;
+    }
+
+    /* Mobile friendly adjustments */
+    @media only screen and (max-width: 600px) {
+      .container {
+        margin: 0 10px; /* Add padding to left and right sides */
+        padding: 20px 0px; /* Add padding on left and right for mobile */
+      }
+
+      input, select, button {
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        width: 100%;
+        box-sizing: border-box; /* Ensure padding is included in the width */
+      }
+    }
+
+    #co2Form {
+      padding: 0px 10px;
+    }
+
+    #explanationcontent {
+      padding: 0px 10px;
+    }
+
+    .inline-fields {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px; /* Space between the two sets of label/select pairs */
+    }
+    .inline-fields label {
+      margin-right: 10px;
+    }
+    .inline-fields select {
+      width: 100%;
+    }
+
+    #formContainer {
+      display: block;
+    }
+
+    #explanationContainer {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>CO₂-beregner</h2>
+    
+    <!-- Form Container -->
+    <div id="formContainer">
+      <form id="co2Form">
+        <label for="carKilometers">Kilometer pr. måned i bil af type <small><i>(dansk gennemsnit: 1200 i benzinbil)</i></small></label>
+        <div class="inline-fields">
+          <input type="number" id="carKilometers" name="carKilometers" value="1200" required>
+          <select id="carType" name="carType" required>
+            <option value="gasoline">Benzinbil</option>
+            <option value="diesel">Dieselbil</option>
+            <option value="hybrid">Hybridbil</option>
+            <option value="electric">Elbil</option>
+          </select>
+        </div>
+
+        <label for="electricityUse">Månedligt elforbrug i kWh <small><i>(dansk gennemsnit: 300)</i></small></label>
+        <input type="number" id="electricityUse" name="electricityUse" value="300" required>
+
+        <label for="shortFlights">Korte flyvninger inden for EU (1.000 km)</label>
+        <input type="number" id="shortFlights" name="shortFlights" value="5" required>
+
+        <label for="longFlights">Lange flyvninger uden for EU (over 3.000 km)</label>
+        <input type="number" id="longFlights" name="longFlights" value="2" required>
+
+        <div class="inline-fields">
+          <div style="width: 100%">
+            <label for="housingType">Boligtype</label>
+            <select id="housingType" name="housingType" required>
+              <option value="house">Hus</option>
+              <option value="apartment">Lejlighed</option>
+            </select>
+          </div>
+
+          <div style="width: 100%">
+            <label for="dietType">Kostvaner</label>
+            <select id="dietType" name="dietType" required>
+              <option value="meat">Kødspiser</option>
+              <option value="vegetarian">Vegetar</option>
+            </select>
+          </div>
+        </div>
+      </form>
+
+      <div id="costDisplay">
+        <p>Prisen for at kompensere for dine CO₂-udledninger:</p>
+        <p class="bold-money" id="costToOffset"></p>
+      </div>
+    </div>
+
+    <h3 id="explanationHeading">Sådan beregnes prisen</h3>
+
+    <!-- Explanation Section -->
+    <div id="explanationContainer">
+      <div id="explanationcontent">
+        <ul>
+          <li><strong>Biludledning:</strong> Kilometer pr. måned × 12 måneder × 0,2 kg CO₂/km.</li>
+          <li><strong>Elforbrug:</strong> kWh pr. måned × 12 måneder × 0,233 kg CO₂/kWh.</li>
+          <li><strong>Korte flyvninger:</strong> Antal flyvninger × 150 kg CO₂ pr. flyvning.</li>
+          <li><strong>Lange flyvninger:</strong> Antal flyvninger × 800 kg CO₂ pr. flyvning.</li>
+          <li>
+            <strong>Andre udledninger:</strong> En basisværdi på 500 kg, plus ekstra udledninger baseret på din boligtype (hus: +500 kg, lejlighed: +0 kg) og dine kostvaner (kødspiser: +1000 kg, vegetar: +500 kg) 
+            (værdierne er danske gennemsnit).
+          </li>
+        </ul>
+        <p style="text-align: center; margin-bottom: 0px;">
+          Prisen for kompensation antages at være
+        </p>
+        <p style="text-align: center; margin-top: 5px;">
+          <b>144 DKK per ton CO₂.</b>
+        </p>
+      </div>
+      <button onclick="toggleForm()">Tilbage til beregning</button>
+    </div>
+  </div>
+  <script>
+    const CAR_CO2_EMISSION_PER_KM_GASOLINE = 0.2;  // kg CO₂ per km for gasoline
+    const CAR_CO2_EMISSION_PER_KM_DIESEL = 0.25;   // kg CO₂ per km for diesel
+    const CAR_CO2_EMISSION_PER_KM_HYBRID = 0.1;    // kg CO₂ per km for hybrid
+    const CAR_CO2_EMISSION_PER_KM_ELECTRIC = 0.05;  // kg CO₂ per km for electric
+    const ELECTRICITY_CO2_EMISSION_PER_KWH = 0.233; // kg CO₂ per kWh
+    const SHORT_FLIGHT_CO2_EMISSION = 150; // kg CO₂ pr. kort flyvning
+    const LONG_FLIGHT_CO2_EMISSION = 800; // kg CO₂ pr. lang flyvning
+    
+    // Emissioner fra øvrige kilder
+    const BASE_OTHER_EMISSIONS = 500; // Basisudledning
+    const HOUSING_EMISSIONS_HOUSE = 500; // Ekstra udledning, hvis du bor i et hus
+    const HOUSING_EMISSIONS_APARTMENT = 0; // Ingen ekstra udledning, hvis du bor i en lejlighed
+    const DIET_EMISSIONS_MEAT = 1000; // Ekstra udledning for kødspisende kost
+    const DIET_EMISSIONS_VEGETARIAN = 500; // Ekstra udledning for vegetarisk kost
+
+    // Pris per ton CO₂ og omregningskurs
+    const PRICE_PER_TON_DKK = 144; // USD per ton CO₂
+
+    document.querySelectorAll('#co2Form input, #co2Form select').forEach(input => {
+      input.addEventListener('input', updateCO2Cost);
+    });
+
+    function updateCO2Cost() {
+      // Hent inputværdier
+      const carKilometers = parseFloat(document.getElementById('carKilometers').value);
+      const electricityUse = parseFloat(document.getElementById('electricityUse').value);
+      const shortFlights = parseFloat(document.getElementById('shortFlights').value);
+      const longFlights = parseFloat(document.getElementById('longFlights').value);
+      const housingType = document.getElementById('housingType').value;
+      const dietType = document.getElementById('dietType').value;
+      const carType = document.getElementById('carType').value; // Get selected car type
+
+        // Bestem emissionsfaktor for biltypen
+        let carEmissionFactor;
+        switch (carType) {
+          case 'gasoline':
+            carEmissionFactor = CAR_CO2_EMISSION_PER_KM_GASOLINE;
+            break;
+          case 'diesel':
+            carEmissionFactor = CAR_CO2_EMISSION_PER_KM_DIESEL;
+            break;
+          case 'hybrid':
+            carEmissionFactor = CAR_CO2_EMISSION_PER_KM_HYBRID;
+            break;
+          case 'electric':
+            carEmissionFactor = CAR_CO2_EMISSION_PER_KM_ELECTRIC;
+            break;
+          default:
+            carEmissionFactor = CAR_CO2_EMISSION_PER_KM_GASOLINE; // Default to gasoline if not selected
+            break;
+        }
+
+      // Beregn udledninger fra transport og el (årligt)
+      const carEmissions = carKilometers * carEmissionFactor * 12;
+      const electricityEmissions = electricityUse * ELECTRICITY_CO2_EMISSION_PER_KWH * 12;
+      const shortFlightEmissions = shortFlights * SHORT_FLIGHT_CO2_EMISSION;
+      const longFlightEmissions = longFlights * LONG_FLIGHT_CO2_EMISSION;
+
+      // Bestem ekstra udledninger fra bolig og kost
+      const housingEmissions = (housingType === "house") ? HOUSING_EMISSIONS_HOUSE : HOUSING_EMISSIONS_APARTMENT;
+      const dietEmissions = (dietType === "meat") ? DIET_EMISSIONS_MEAT : DIET_EMISSIONS_VEGETARIAN;
+
+      // Beregn øvrige udledninger
+      const otherEmissions = BASE_OTHER_EMISSIONS + housingEmissions + dietEmissions;
+
+      // Total CO₂-udledning (kg/år)
+      const totalEmissions = carEmissions + electricityEmissions + shortFlightEmissions + longFlightEmissions + otherEmissions;
+
+      // Beregn kompensationsprisen
+      const costInDKK = (totalEmissions / 1000) * PRICE_PER_TON_DKK;
+
+      // Opdater prisen dynamisk
+      document.getElementById('costToOffset').innerText = `${costInDKK.toFixed(0)} DKK`;
+    }
+
+    // Initial beregning
+    updateCO2Cost();
+
+    // Toggle visibility of the form and explanation
+    function toggleForm() {
+      document.getElementById('formContainer').style.display = 'block';
+      document.getElementById('explanationContainer').style.display = 'none';
+    }
+
+    // Show explanation when clicked
+    document.getElementById('explanationHeading').addEventListener('click', () => {
+      document.getElementById('formContainer').style.display = 'none';
+      document.getElementById('explanationContainer').style.display = 'block';
+    });
+  </script>
+</body>
+</html>
