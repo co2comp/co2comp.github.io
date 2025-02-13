@@ -361,7 +361,7 @@
 
       // Opdater prisen dynamisk
       document.getElementById('costToOffset').innerText = `${costInDKK.toFixed(0)} DKK`;
-      document.getElementById('mobilepay-link').href = `mobilepay://send?phone=82828&amount=${costInDKK.toFixed(0)}`;
+      document.getElementById('mobilepay-link').href = `mobilepay://send?phone=45650&amount=${costInDKK.toFixed(0)}`;
     }
 
     // Initial beregning
@@ -381,7 +381,7 @@
 
     // Display mobilepay element if on mobile
     if (/Mobi|Android|iPhone|iPad|iPod/.test(navigator.userAgent)) {
-      //document.getElementById('mobilepay').style.display = 'inline';
+      document.getElementById('mobilepay').style.display = 'inline';
     }
 
     document.getElementById('carType').addEventListener('change', function() {
