@@ -134,9 +134,9 @@
     <!-- Form Container -->
     <div id="formContainer">
       <form id="co2Form">
-        <label for="carKilometers">Kilometer pr. måned i bil af type <small><i>(dansk gennemsnit: 1200 i benzinbil)</i></small></label>
+        <label for="carKilometers">Kilometer pr. år i bil af type</label>
         <div class="inline-fields">
-          <input type="number" id="carKilometers" name="carKilometers" value="1200" required>
+          <input type="number" id="carKilometers" name="carKilometers" value="14500" required>
           <select id="carType" name="carType" required>
             <option value="gasoline">Benzinbil</option>
             <option value="diesel">Dieselbil</option>
@@ -145,15 +145,30 @@
           </select>
         </div>
 
-        <label for="electricityUse">Elforbrug pr. måned i kWh
+        <label for="householdSize">Personer i husstanden</label>
+        <input type="number" id="householdSize" name="householdSize" value="2" required>
+
+        <label for="electricityUse">El pr. år i kWh for husstanden
             <small>
               <i>
-                (dansk gennemsnit: 300)
                 <span id="electricCarNotice" style="display: none;">(Elforbrug til elbil skal medregnes. Km/per ovenfor ignoreres.)</span>
               </i>
             </small>
         </label>
-        <input type="number" id="electricityUse" name="electricityUse" value="300" required>
+        <input type="number" id="electricityUse" name="electricityUse" value="3600" required>
+
+        <label for="heatingUse">Varmeforbrug pr. år i kWh for husstanden</label>
+        <div class="inline-fields">
+          <input type="number" id="heatingUse" name="heatingUse" value="20000" required>
+          <select id="heatingType" name="heatingType" required>
+            <option value="electric">Elvarme</option>
+            <option value="gas">Naturgas</option>
+            <option value="district" selected="selected">Fjernvarme</option>
+            <option value="biomass">Biomasse</option>
+            <option value="oil">Oliefyr</option>
+            <option value="heatpump">Varmepumpe</option>
+          </select>
+        </div>
 
         <label for="shortFlights">Korte flyvninger inden for EU (1.000 km) i år</label>
         <input type="number" id="shortFlights" name="shortFlights" value="5" required>
@@ -178,7 +193,18 @@
             </select>
           </div>
         </div>
+
+        <label for="clothing">Tøjforbrug i år</label>
+        <select id="clothing" name="clothing" required>
+          <option value="5">0-9 stykker tøj.</option>
+          <option value="15" selected="selected">10-19 stykker tøj.</option>
+          <option value="25">20-29 stykker tøj.</option>
+          <option value="35">30-39 stykker tøj.</option>
+          <option value="45">40-49 stykker tøj.</option>
+          <option value="60">50 stk. eller flere</option>
+        </select>
       </form>
+
 
       <div id="costDisplay">
         <p>Prisen for at kompensere for dine CO₂-udledninger i år:</p>
@@ -191,16 +217,17 @@
     <!-- Explanation Section -->
     <div id="explanationContainer">
       <div id="explanationcontent">
-        <ul>
-          <li><strong>Biludledning:</strong> Kilometer pr. måned × 12 måneder × 0,2 kg CO₂/km.</li>
-          <li><strong>Elforbrug:</strong> kWh pr. måned × 12 måneder × 0,233 kg CO₂/kWh.</li>
-          <li><strong>Korte flyvninger i år:</strong> Antal flyvninger × 150 kg CO₂ pr. flyvning.</li>
-          <li><strong>Lange flyvninger i år:</strong> Antal flyvninger × 800 kg CO₂ pr. flyvning.</li>
-          <li>
-            <strong>Andre udledninger:</strong> En basisværdi på 500 kg, plus ekstra udledninger baseret på din boligtype (hus: +500 kg, lejlighed: +0 kg) og dine kostvaner (kødspiser: +1000 kg, vegetar: +500 kg) 
-            (værdierne er danske gennemsnit).
-          </li>
-        </ul>
+      <ul>
+          <li><strong>Bil</strong>: Kilometer pr. år × 0,2 kg CO₂/km.</li>
+          <li><strong>El</strong>: kWh pr. år × 0,233 kg CO₂/kWh. / husstand</li>
+          <li><strong>Varme</strong>: kWh pr. år × CO₂-udledning pr. energikilde. / husstand</li>
+          <li><strong>Flyvninger</strong>: Korte flyvninger × 150 kg CO₂, lange flyvninger × 800 kg CO₂.</li>
+          <li><strong>Tøjforbrug</strong>: 10 kg CO₂ per stykke tøj.</li>
+          <li><strong>Bolig og kostvaner:</strong>Hus (+500 kg CO₂), Kødspiser (+1000 kg CO₂)<br></li>
+          <li><strong>Andet</strong>: 300 kg CO₂ (dagligvarer, affald, møbler, elektronik, madspild)</li>
+      </ul>
+
+      <p></p>
         <p style="text-align: center; margin-bottom: 0px;">
           Prisen for kompensation antages at være
         </p>
@@ -219,6 +246,7 @@
     const ELECTRICITY_CO2_EMISSION_PER_KWH = 0.233; // kg CO₂ per kWh
     const SHORT_FLIGHT_CO2_EMISSION = 150; // kg CO₂ pr. kort flyvning
     const LONG_FLIGHT_CO2_EMISSION = 800; // kg CO₂ pr. lang flyvning
+    const CLOTHING_CO2_EMISSION_PER_ITEM = 10; // kg CO₂ per stykke tøj
     
     // Emissioner fra øvrige kilder
     const BASE_OTHER_EMISSIONS = 500; // Basisudledning
@@ -226,6 +254,14 @@
     const HOUSING_EMISSIONS_APARTMENT = 0; // Ingen ekstra udledning, hvis du bor i en lejlighed
     const DIET_EMISSIONS_MEAT = 1000; // Ekstra udledning for kødspisende kost
     const DIET_EMISSIONS_VEGETARIAN = 500; // Ekstra udledning for vegetarisk kost
+
+    // CO₂-udledning pr. kWh for forskellige varmekilder
+    const HEATING_EMISSIONS_ELECTRIC = 0.233;  // Elvarme (samme som elforbrug)
+    const HEATING_EMISSIONS_GAS = 0.185;      // Naturgas
+    const HEATING_EMISSIONS_DISTRICT = 0.05;   // Fjernvarme (kan variere afhængig af kilde)
+    const HEATING_EMISSIONS_BIOMASS = 0.035;   // Biomasse
+    const HEATING_EMISSIONS_OIL = 0.267;       // Oliefyr
+    const HEATING_EMISSIONS_HEATPUMP = 0.05;   // Varmepumpe
 
     // Pris per ton CO₂ og omregningskurs
     const PRICE_PER_TON_DKK = 144; // USD per ton CO₂
@@ -242,43 +278,77 @@
       const longFlights = parseFloat(document.getElementById('longFlights').value);
       const housingType = document.getElementById('housingType').value;
       const dietType = document.getElementById('dietType').value;
+      const clothingCount = parseInt(document.getElementById('clothing').value);
       const carType = document.getElementById('carType').value; // Get selected car type
+      const householdSize = parseInt(document.getElementById('householdSize').value); // Husstandsstørrelse
+      const heatingUse = parseFloat(document.getElementById('heatingUse').value); // Get heating use
+      const heatingType = document.getElementById('heatingType').value; // Get heating source
 
-        // Bestem emissionsfaktor for biltypen
-        let carEmissionFactor;
-        switch (carType) {
-          case 'gasoline':
-            carEmissionFactor = CAR_CO2_EMISSION_PER_KM_GASOLINE;
-            break;
-          case 'diesel':
-            carEmissionFactor = CAR_CO2_EMISSION_PER_KM_DIESEL;
-            break;
-          case 'hybrid':
-            carEmissionFactor = CAR_CO2_EMISSION_PER_KM_HYBRID;
-            break;
-          case 'electric':
-            carEmissionFactor = CAR_CO2_EMISSION_PER_KM_ELECTRIC;
-            break;
-          default:
-            carEmissionFactor = CAR_CO2_EMISSION_PER_KM_GASOLINE; // Default to gasoline if not selected
-            break;
-        }
+      // Bestem emissionsfaktor for biltypen
+      let carEmissionFactor;
+      switch (carType) {
+        case 'gasoline':
+          carEmissionFactor = CAR_CO2_EMISSION_PER_KM_GASOLINE;
+          break;
+        case 'diesel':
+          carEmissionFactor = CAR_CO2_EMISSION_PER_KM_DIESEL;
+          break;
+        case 'hybrid':
+          carEmissionFactor = CAR_CO2_EMISSION_PER_KM_HYBRID;
+          break;
+        case 'electric':
+          carEmissionFactor = CAR_CO2_EMISSION_PER_KM_ELECTRIC;
+          break;
+        default:
+          carEmissionFactor = CAR_CO2_EMISSION_PER_KM_GASOLINE; // Default to gasoline if not selected
+          break;
+      }
+
+      // Bestem emissionsfaktor for varmeforbrug
+      let heatingEmissionFactor;
+      switch (heatingType) {
+        case 'electric':
+          heatingEmissionFactor = HEATING_EMISSIONS_ELECTRIC;
+          break;
+        case 'gas':
+          heatingEmissionFactor = HEATING_EMISSIONS_GAS;
+          break;
+        case 'district':
+          heatingEmissionFactor = HEATING_EMISSIONS_DISTRICT;
+          break;
+        case 'biomass':
+          heatingEmissionFactor = HEATING_EMISSIONS_BIOMASS;
+          break;
+        case 'oil':
+          heatingEmissionFactor = HEATING_EMISSIONS_OIL;
+          break;
+        case 'heatpump':
+          heatingEmissionFactor = HEATING_EMISSIONS_HEATPUMP;
+          break;
+        default:
+          heatingEmissionFactor = HEATING_EMISSIONS_ELECTRIC; // Default to electric if not selected
+          break;
+      }
 
       // Beregn udledninger fra transport og el (årligt)
-      const carEmissions = carKilometers * carEmissionFactor * 12;
-      const electricityEmissions = electricityUse * ELECTRICITY_CO2_EMISSION_PER_KWH * 12;
+      const carEmissions = (carKilometers * carEmissionFactor);
+      const electricityEmissions = (electricityUse * ELECTRICITY_CO2_EMISSION_PER_KWH) / householdSize;
       const shortFlightEmissions = shortFlights * SHORT_FLIGHT_CO2_EMISSION;
       const longFlightEmissions = longFlights * LONG_FLIGHT_CO2_EMISSION;
+      const heatingEmissions = (heatingUse * heatingEmissionFactor) / householdSize;
 
       // Bestem ekstra udledninger fra bolig og kost
       const housingEmissions = (housingType === "house") ? HOUSING_EMISSIONS_HOUSE : HOUSING_EMISSIONS_APARTMENT;
       const dietEmissions = (dietType === "meat") ? DIET_EMISSIONS_MEAT : DIET_EMISSIONS_VEGETARIAN;
 
+      // Beregn udledning fra tøjforbrug
+      const clothingEmissions = clothingCount * CLOTHING_CO2_EMISSION_PER_ITEM;
+
       // Beregn øvrige udledninger
       const otherEmissions = BASE_OTHER_EMISSIONS + housingEmissions + dietEmissions;
 
       // Total CO₂-udledning (kg/år)
-      const totalEmissions = carEmissions + electricityEmissions + shortFlightEmissions + longFlightEmissions + otherEmissions;
+      const totalEmissions = carEmissions + electricityEmissions + heatingEmissions + shortFlightEmissions + longFlightEmissions + clothingEmissions + otherEmissions;
 
       // Beregn kompensationsprisen
       const costInDKK = (totalEmissions / 1000) * PRICE_PER_TON_DKK;
