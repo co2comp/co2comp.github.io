@@ -41,10 +41,10 @@
       margin-bottom: 5px;
       border-radius: 5px;
       border: 1px solid #ccc;
-      box-sizing: border-box; /* Ensure padding is included in the width */
+      box-sizing: border-box;
     }
     input[type="number"] {
-      -moz-appearance: textfield; /* Remove number input arrows in Firefox */
+      -moz-appearance: textfield;
     }
     button {
       background-color: #4CAF50;
@@ -131,15 +131,14 @@
   <div class="container">
     <h2>CO₂-beregner pr. år</h2>
     
-    <!-- Form Container -->
     <div id="formContainer">
       <form id="co2Form">
         <label for="householdSize">Personer i husstanden</label>
-        <input type="number" id="householdSize" name="householdSize" value="2" required>
+        <input type="number" id="householdSize" name="householdSize" value="2" required min="1">
 
         <label for="carKilometers">Kilometer i bil af type</label>
         <div class="inline-fields">
-          <input type="number" id="carKilometers" name="carKilometers" value="14500" required>
+          <input type="number" id="carKilometers" name="carKilometers" value="14500" required min="0">
           <select id="carType" name="carType" required>
             <option value="gasoline">Benzinbil</option>
             <option value="diesel">Dieselbil</option>
@@ -155,15 +154,15 @@
               </i>
             </small>
         </label>
-        <input type="number" id="electricityUse" name="electricityUse" value="3600" required>
+        <input type="number" id="electricityUse" name="electricityUse" value="3600" required min="0">
 
         <label for="heatingUse">Varme i kWh for husstanden af type</label>
         <div class="inline-fields">
-          <input type="number" id="heatingUse" name="heatingUse" value="20000" required>
+          <input type="number" id="heatingUse" name="heatingUse" value="20000" required min="0">
           <select id="heatingType" name="heatingType" required>
             <option value="electric">Elvarme</option>
             <option value="gas">Naturgas</option>
-            <option value="district" selected="selected">Fjernvarme</option>
+            <option value="district" selected>Fjernvarme</option>
             <option value="biomass">Biomasse</option>
             <option value="oil">Oliefyr</option>
             <option value="heatpump">Varmepumpe</option>
@@ -203,7 +202,7 @@
         <label for="clothing">Tøjkøb</label>
         <select id="clothing" name="clothing" required>
           <option value="5">0-9 stykker tøj.</option>
-          <option value="15" selected="selected">10-19 stykker tøj.</option>
+          <option value="15" selected>10-19 stykker tøj.</option>
           <option value="25">20-29 stykker tøj.</option>
           <option value="35">30-39 stykker tøj.</option>
           <option value="45">40-49 stykker tøj.</option>
@@ -219,20 +218,17 @@
 
     <h3 id="explanationHeading">Sådan beregnes prisen</h3>
 
-    <!-- Explanation Section -->
     <div id="explanationContainer">
       <div id="explanationcontent">
-      <ul>
+        <ul>
           <li><strong>Bil</strong>: Kilometer pr. år × 0,2 kg CO₂/km.</li>
           <li><strong>El</strong>: kWh pr. år × 0,233 kg CO₂/kWh. / husstand</li>
           <li><strong>Varme</strong>: kWh pr. år × CO₂-udledning pr. energikilde. / husstand</li>
           <li><strong>Flyvninger</strong>: Korte flyvninger × 150 kg CO₂, lange flyvninger × 800 kg CO₂.</li>
           <li><strong>Tøjforbrug</strong>: 10 kg CO₂ per stykke tøj.</li>
-          <li><strong>Bolig og kostvaner:</strong>Hus (+500 kg CO₂), Kødspiser (+1000 kg CO₂)<br></li>
+          <li><strong>Bolig og kostvaner:</strong>Hus (+500 kg CO₂), Kødspiser (+1000 kg CO₂)</li>
           <li><strong>Andet</strong>: 300 kg CO₂ (dagligvarer, affald, møbler, elektronik, madspild)</li>
-      </ul>
-
-      <p></p>
+        </ul>
         <p style="text-align: center; margin-bottom: 0px;">
           Prisen for kompensation antages at være
         </p>
@@ -277,16 +273,16 @@
 
     function updateCO2Cost() {
       // Hent inputværdier
-      const carKilometers = parseFloat(document.getElementById('carKilometers').value);
-      const electricityUse = parseFloat(document.getElementById('electricityUse').value);
-      const shortFlights = parseFloat(document.getElementById('shortFlights').value);
-      const longFlights = parseFloat(document.getElementById('longFlights').value);
+      const carKilometers = parseFloat(document.getElementById('carKilometers').value) || 14500;
+      const electricityUse = parseFloat(document.getElementById('electricityUse').value) || 3600;
+      const shortFlights = parseFloat(document.getElementById('shortFlights').value) || 5;
+      const longFlights = parseFloat(document.getElementById('longFlights').value) || 2;
       const housingType = document.getElementById('housingType').value;
       const dietType = document.getElementById('dietType').value;
       const clothingCount = parseInt(document.getElementById('clothing').value);
       const carType = document.getElementById('carType').value; // Get selected car type
-      const householdSize = parseInt(document.getElementById('householdSize').value); // Husstandsstørrelse
-      const heatingUse = parseFloat(document.getElementById('heatingUse').value); // Get heating use
+      const householdSize = parseInt(document.getElementById('householdSize').value) || 2; // Husstandsstørrelse
+      const heatingUse = parseFloat(document.getElementById('heatingUse').value) || 20000; // Get heating use
       const heatingType = document.getElementById('heatingType').value; // Get heating source
 
       // Bestem emissionsfaktor for biltypen
