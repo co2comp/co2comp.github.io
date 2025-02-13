@@ -229,7 +229,7 @@
           Prisen for kompensation antages at være
         </p>
         <p style="text-align: center; margin-top: 5px;">
-          <b>500 DKK per ton CO₂.</b>
+          <b>200 DKK per ton CO₂.</b>
         </p>
       </div>
       <button onclick="toggleForm()">Tilbage til beregning</button>
@@ -261,7 +261,7 @@
     const HEATING_EMISSIONS_HEATPUMP = 0.05;   // Varmepumpe
 
     // Pris per ton CO₂ og omregningskurs
-    const PRICE_PER_TON_DKK = 500; // DKK per ton CO₂
+    const PRICE_PER_TON_DKK = 200; // DKK per ton CO₂
 
     document.querySelectorAll('#co2Form input, #co2Form select').forEach(input => {
       input.addEventListener('input', updateCO2Cost);
