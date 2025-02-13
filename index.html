@@ -141,13 +141,17 @@
           </select>
         </div>
 
-        <label for="electricityUse">El i kWh for husstanden
-            <small>
-              <i>
-                <span id="electricCarNotice" style="display: none;">(Elforbrug til elbil skal medregnes. Km/per ovenfor ignoreres.)</span>
-              </i>
-            </small>
-        </label>
+        <small>
+          <i>
+            <div style="visibility: hidden" id="electricCarNoticePlaceholder">[Placeholder]</div>
+          </i>
+        </small>
+        <label for="electricityUse">El i kWh for husstanden</label>
+        <small>
+          <i>
+            <div id="electricCarNotice" style="display: none;">(Elforbrug til elbil skal medregnes. Km/per ovenfor ignoreres.)</div>
+          </i>
+        </small>
         <input type="number" id="electricityUse" name="electricityUse" value="3600" required min="0">
 
         <label for="heatingUse">Varme i kWh for husstanden af type</label>
@@ -165,12 +169,14 @@
 
         <div class="inline-fields">
           <div style="width: 100%">
-              <label for="shortFlights">Korte flyvninger <br><small><i>(indenfor EU, 1000 km)</i></small></label>
+            <label for="shortFlights">Korte flyvninger</label>
+            <small><i><div>(indenfor EU, 1000 km)</div></i></small>
             <input type="number" id="shortFlights" name="shortFlights" value="5" required>
           </div>
           
           <div style="width: 100%">
-              <label for="longFlights">Lange flyninger <br><small><i>(udenfor EU, 3000km)</i></small></label>
+            <label for="longFlights">Lange flyninger</label>
+            <small><i><div>(udenfor EU, 3000 km)</div></i></small>
             <input type="number" id="longFlights" name="longFlights" value="2" required>
           </div>
         </div>
@@ -380,10 +386,13 @@
 
     document.getElementById('carType').addEventListener('change', function() {
       const carNotice = document.getElementById('electricCarNotice');
+      const carNoticePlaceholder = document.getElementById('electricCarNoticePlaceholder');
       if (this.value === 'electric') {
         carNotice.style.display = 'block';
+        carNoticePlaceholder.style.display = 'none';
       } else {
         carNotice.style.display = 'none';
+        carNoticePlaceholder.style.display = 'block';
       }
     });
   </script>
