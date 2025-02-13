@@ -145,7 +145,14 @@
           </select>
         </div>
 
-        <label for="electricityUse">Elforbrug pr. måned i kWh <small><i>(dansk gennemsnit: 300)</i></small></label>
+        <label for="electricityUse">Elforbrug pr. måned i kWh
+            <small>
+              <i>
+                (dansk gennemsnit: 300)
+                <span id="electricCarNotice" style="display: none;">(Elforbrug til elbil skal medregnes. Km/per ovenfor ignoreres.)</span>
+              </i>
+            </small>
+        </label>
         <input type="number" id="electricityUse" name="electricityUse" value="300" required>
 
         <label for="shortFlights">Korte flyvninger inden for EU (1.000 km) i år</label>
@@ -293,6 +300,15 @@
     document.getElementById('explanationHeading').addEventListener('click', () => {
       document.getElementById('formContainer').style.display = 'none';
       document.getElementById('explanationContainer').style.display = 'block';
+    });
+
+    document.getElementById('carType').addEventListener('change', function() {
+      const carNotice = document.getElementById('electricCarNotice');
+      if (this.value === 'electric') {
+        carNotice.style.display = 'block';
+      } else {
+        carNotice.style.display = 'none';
+      }
     });
   </script>
 </body>
