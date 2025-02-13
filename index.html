@@ -269,17 +269,18 @@
 
     function updateCO2Cost() {
       // Hent inputværdier
-      const carKilometers = parseFloat(document.getElementById('carKilometers').value); // default 14500;
-      const electricityUse = parseFloat(document.getElementById('electricityUse').value); // default 3600;
-      const shortFlights = parseFloat(document.getElementById('shortFlights').value); // default 5;
-      const longFlights = parseFloat(document.getElementById('longFlights').value); // default 2;
       const housingType = document.getElementById('housingType').value;
       const dietType = document.getElementById('dietType').value;
       const clothingCount = parseInt(document.getElementById('clothing').value);
       const carType = document.getElementById('carType').value;
-      const householdSize = parseInt(document.getElementById('householdSize').value); // default 2;
-      const heatingUse = parseFloat(document.getElementById('heatingUse').value); // default 20000;
       const heatingType = document.getElementById('heatingType').value;
+
+      let carKilometers = parseFloat(document.getElementById('carKilometers').value); // default 14500;
+      let electricityUse = parseFloat(document.getElementById('electricityUse').value); // default 3600;
+      let shortFlights = parseFloat(document.getElementById('shortFlights').value); // default 5;
+      let longFlights = parseFloat(document.getElementById('longFlights').value); // default 2;
+      let householdSize = parseInt(document.getElementById('householdSize').value); // default 2;
+      let heatingUse = parseFloat(document.getElementById('heatingUse').value); // default 20000;
 
       // If values are not numeric, set them to default values
       if (isNaN(carKilometers)) { carKilometers = 14500; }
