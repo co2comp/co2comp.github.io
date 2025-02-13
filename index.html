@@ -38,7 +38,7 @@
     input, select, button {
       width: 100%;
       padding: 10px;
-      margin-bottom: 15px;
+      margin-bottom: 5px;
       border-radius: 5px;
       border: 1px solid #ccc;
       box-sizing: border-box; /* Ensure padding is included in the width */
@@ -90,7 +90,7 @@
 
       input, select, button {
         padding: 10px;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
         border-radius: 5px;
         border: 1px solid #ccc;
         width: 100%;
@@ -129,12 +129,15 @@
 </head>
 <body>
   <div class="container">
-    <h2>CO₂-beregner</h2>
+    <h2>CO₂-beregner pr. år</h2>
     
     <!-- Form Container -->
     <div id="formContainer">
       <form id="co2Form">
-        <label for="carKilometers">Kilometer pr. år i bil af type</label>
+        <label for="householdSize">Personer i husstanden</label>
+        <input type="number" id="householdSize" name="householdSize" value="2" required>
+
+        <label for="carKilometers">Kilometer i bil af type</label>
         <div class="inline-fields">
           <input type="number" id="carKilometers" name="carKilometers" value="14500" required>
           <select id="carType" name="carType" required>
@@ -145,10 +148,7 @@
           </select>
         </div>
 
-        <label for="householdSize">Personer i husstanden</label>
-        <input type="number" id="householdSize" name="householdSize" value="2" required>
-
-        <label for="electricityUse">El pr. år i kWh for husstanden
+        <label for="electricityUse">El i kWh for husstanden
             <small>
               <i>
                 <span id="electricCarNotice" style="display: none;">(Elforbrug til elbil skal medregnes. Km/per ovenfor ignoreres.)</span>
@@ -157,7 +157,7 @@
         </label>
         <input type="number" id="electricityUse" name="electricityUse" value="3600" required>
 
-        <label for="heatingUse">Varmeforbrug pr. år i kWh for husstanden</label>
+        <label for="heatingUse">Varme i kWh for husstanden af type</label>
         <div class="inline-fields">
           <input type="number" id="heatingUse" name="heatingUse" value="20000" required>
           <select id="heatingType" name="heatingType" required>
@@ -170,11 +170,17 @@
           </select>
         </div>
 
-        <label for="shortFlights">Korte flyvninger inden for EU (1.000 km) i år</label>
-        <input type="number" id="shortFlights" name="shortFlights" value="5" required>
-
-        <label for="longFlights">Lange flyvninger uden for EU (over 3.000 km) i år</label>
-        <input type="number" id="longFlights" name="longFlights" value="2" required>
+        <div class="inline-fields">
+          <div style="width: 100%">
+              <label for="housingType">Korte flyvninger <br><small><i>(indenfor EU, 1000 km)</i></small></label>
+            <input type="number" id="shortFlights" name="shortFlights" value="5" required>
+          </div>
+          
+          <div style="width: 100%">
+              <label for="housingType">Lange flyninger <br><small><i>(udenfor EU, 3000km)</i></small></label>
+            <input type="number" id="longFlights" name="longFlights" value="2" required>
+          </div>
+        </div>
 
         <div class="inline-fields">
           <div style="width: 100%">
@@ -194,7 +200,7 @@
           </div>
         </div>
 
-        <label for="clothing">Tøjforbrug i år</label>
+        <label for="clothing">Tøjkøb</label>
         <select id="clothing" name="clothing" required>
           <option value="5">0-9 stykker tøj.</option>
           <option value="15" selected="selected">10-19 stykker tøj.</option>
@@ -204,7 +210,6 @@
           <option value="60">50 stk. eller flere</option>
         </select>
       </form>
-
 
       <div id="costDisplay">
         <p>Prisen for at kompensere for dine CO₂-udledninger i år:</p>
