@@ -86,6 +86,10 @@
         width: 100%;
         box-sizing: border-box; /* Ensure padding is included in the width */
       }
+
+      small {
+        font-size: 0.6em;
+      }
     }
 
     #co2Form {
@@ -161,22 +165,26 @@
 
         <div class="inline-fields">
           <div style="width: 100%">
-              <label for="housingType">Korte flyvninger <br><small><i>(indenfor EU, 1000 km)</i></small></label>
+              <label for="shortFlights">Korte flyvninger <br><small><i>(indenfor EU, 1000 km)</i></small></label>
             <input type="number" id="shortFlights" name="shortFlights" value="5" required>
           </div>
           
           <div style="width: 100%">
-              <label for="housingType">Lange flyninger <br><small><i>(udenfor EU, 3000km)</i></small></label>
+              <label for="longFlights">Lange flyninger <br><small><i>(udenfor EU, 3000km)</i></small></label>
             <input type="number" id="longFlights" name="longFlights" value="2" required>
           </div>
         </div>
 
         <div class="inline-fields">
           <div style="width: 100%">
-            <label for="housingType">Boligtype</label>
-            <select id="housingType" name="housingType" required>
-              <option value="house">Hus</option>
-              <option value="apartment">Lejlighed</option>
+            <label for="clothing">Tøjkøb</label>
+            <select id="clothing" name="clothing" required>
+              <option value="5">0-9 styk.</option>
+              <option value="15" selected>10-19 styk.</option>
+              <option value="25">20-29 styk.</option>
+              <option value="35">30-39 styk.</option>
+              <option value="45">40-49 styk.</option>
+              <option value="60">+50 stk. </option>
             </select>
           </div>
 
@@ -188,16 +196,6 @@
             </select>
           </div>
         </div>
-
-        <label for="clothing">Tøjkøb</label>
-        <select id="clothing" name="clothing" required>
-          <option value="5">0-9 stykker tøj.</option>
-          <option value="15" selected>10-19 stykker tøj.</option>
-          <option value="25">20-29 stykker tøj.</option>
-          <option value="35">30-39 stykker tøj.</option>
-          <option value="45">40-49 stykker tøj.</option>
-          <option value="60">50 stk. eller flere</option>
-        </select>
       </form>
 
       <div id="costDisplay">
@@ -221,12 +219,12 @@
           <li><strong>El</strong>: kWh pr. år × 0,233 kg CO₂/kWh. / husstand</li>
           <li><strong>Varme</strong>: kWh pr. år × CO₂-udledning pr. energikilde. / husstand</li>
           <li><strong>Flyvninger</strong>: Korte flyvninger × 150 kg CO₂, lange flyvninger × 800 kg CO₂.</li>
-          <li><strong>Tøjforbrug</strong>: 10 kg CO₂ per stykke tøj.</li>
-          <li><strong>Bolig og kostvaner:</strong>Hus (+500 kg CO₂), Kødspiser (+1000 kg CO₂)</li>
-          <li><strong>Andet</strong>: 300 kg CO₂ (dagligvarer, affald, møbler, elektronik, madspild)</li>
+          <li><strong>Tøjkøb</strong>: 10 kg CO₂ per stykke tøj.</li>
+          <li><strong>Kostvaner</strong>: Kødspiser (+1000 kg CO₂)</li>
+          <li><strong>Andet</strong>: 600 kg CO₂ (dagligvarer, affald, møbler, elektronik, madspild)</li>
         </ul>
         <p style="text-align: center; margin-bottom: 0px;">
-          Prisen for kompensation antages at være
+          Prisen for kompensation hos klimatræ.dk er
         </p>
         <p style="text-align: center; margin-top: 5px;">
           <b>200 DKK per ton CO₂.</b>
@@ -246,9 +244,7 @@
     const CLOTHING_CO2_EMISSION_PER_ITEM = 10; // kg CO₂ per stykke tøj
     
     // Emissioner fra øvrige kilder
-    const BASE_OTHER_EMISSIONS = 500; // Basisudledning
-    const HOUSING_EMISSIONS_HOUSE = 500; // Ekstra udledning, hvis du bor i et hus
-    const HOUSING_EMISSIONS_APARTMENT = 0; // Ingen ekstra udledning, hvis du bor i en lejlighed
+    const BASE_OTHER_EMISSIONS = 600; // Basisudledning
     const DIET_EMISSIONS_MEAT = 1000; // Ekstra udledning for kødspisende kost
     const DIET_EMISSIONS_VEGETARIAN = 500; // Ekstra udledning for vegetarisk kost
 
@@ -269,7 +265,6 @@
 
     function updateCO2Cost() {
       // Hent inputværdier
-      const housingType = document.getElementById('housingType').value;
       const dietType = document.getElementById('dietType').value;
       const clothingCount = parseInt(document.getElementById('clothing').value);
       const carType = document.getElementById('carType').value;
@@ -344,14 +339,13 @@
       const heatingEmissions = (heatingUse * heatingEmissionFactor) / householdSize;
 
       // Bestem ekstra udledninger fra bolig og kost
-      const housingEmissions = (housingType === "house") ? HOUSING_EMISSIONS_HOUSE : HOUSING_EMISSIONS_APARTMENT;
       const dietEmissions = (dietType === "meat") ? DIET_EMISSIONS_MEAT : DIET_EMISSIONS_VEGETARIAN;
 
       // Beregn udledning fra tøjforbrug
       const clothingEmissions = clothingCount * CLOTHING_CO2_EMISSION_PER_ITEM;
 
       // Beregn øvrige udledninger
-      const otherEmissions = BASE_OTHER_EMISSIONS + housingEmissions + dietEmissions;
+      const otherEmissions = BASE_OTHER_EMISSIONS + dietEmissions;
 
       // Total CO₂-udledning (kg/år)
       const totalEmissions = carEmissions + electricityEmissions + heatingEmissions + shortFlightEmissions + longFlightEmissions + clothingEmissions + otherEmissions;
