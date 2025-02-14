@@ -123,21 +123,21 @@
   </head>
   <body>
     <div class="container">
-      <h2>CO₂-beregner pr. år</h2>
+      <h2 id="heading">CO₂-beregner pr. år</h2>
 
       <div id="formContainer">
         <form id="co2Form">
-          <label for="householdSize">Personer i din husstand</label>
+          <label id="householdSizeLabel" for="householdSize">Personer i din husstand</label>
           <input type="number" id="householdSize" name="householdSize" value="2" required min="1">
 
-          <label for="carKilometers">Kilometer i bil af type</label>
+          <label id="carKilometersLabel" for="carKilometers">Kilometer i bil af type</label>
           <div class="inline-fields">
             <input type="number" id="carKilometers" name="carKilometers" value="14500" required min="0">
             <select id="carType" name="carType" required>
-              <option value="gasoline">Benzinbil</option>
-              <option value="diesel">Dieselbil</option>
-              <option value="hybrid">Hybridbil</option>
-              <option value="electric">Elbil</option>
+              <option value="gasoline" id="carTypeGasolineOption">Benzinbil</option>
+              <option value="diesel" id="carTypeDieselOption">Dieselbil</option>
+              <option value="hybrid" id="carTypeHybridOption">Hybridbil</option>
+              <option value="electric" id="carTypeElectricOption">Elbil</option>
             </select>
           </div>
 
@@ -146,7 +146,7 @@
               <div style="visibility: hidden" id="electricCarNoticePlaceholder">[Placeholder]</div>
             </i>
           </small>
-          <label for="electricityUse">El i kWh for husstanden</label>
+          <label id="electricityUseLabel" for="electricityUse">El i kWh for husstanden</label>
           <small>
             <i>
               <div id="electricCarNotice" style="display: none;">(Elforbrug til elbil skal medregnes. Kilometer ovenfor ignoreres.)</div>
@@ -154,74 +154,74 @@
           </small>
           <input type="number" id="electricityUse" name="electricityUse" value="3600" required min="0">
 
-          <label for="heatingUse">Varme i kWh for husstanden af type</label>
+          <label id="heatingUseLabel" for="heatingUse">Varme i kWh for husstanden af type</label>
           <div class="inline-fields">
             <input type="number" id="heatingUse" name="heatingUse" value="20000" required min="0">
             <select id="heatingType" name="heatingType" required>
-              <option value="electric">Elvarme</option>
-              <option value="gas">Naturgas</option>
-              <option value="district" selected>Fjernvarme</option>
-              <option value="biomass">Biomasse</option>
-              <option value="oil">Oliefyr</option>
-              <option value="heatpump">Varmepumpe</option>
+              <option id="heatingTypeElectricOption" value="electric">Elvarme</option>
+              <option id="heatingTypeGasOption" value="gas">Naturgas</option>
+              <option id="heatingTypeDistrictOption" value="district" selected>Fjernvarme</option>
+              <option id="heatingTypeBiomassOption" value="biomass">Biomasse</option>
+              <option id="heatingTypeOliOption" value="oil">Oliefyr</option>
+              <option id="heatingTypeHeatpumpOption" value="heatpump">Varmepumpe</option>
             </select>
           </div>
 
           <div class="inline-fields">
             <div style="width: 100%">
-              <label for="shortFlights">Korte flyvninger</label>
-              <small><i><div>(indenfor EU, 1000 km)</div></i></small>
+              <label id="shortFlightsLabel" for="shortFlights">Korte flyvninger</label>
+              <small><i><div id="shortFlightsInfo">(indenfor EU, 1000 km)</div></i></small>
               <input type="number" id="shortFlights" name="shortFlights" value="5" required>
             </div>
 
             <div style="width: 100%">
-              <label for="longFlights">Lange flyninger</label>
-              <small><i><div>(udenfor EU, 3000 km)</div></i></small>
+              <label id="longFlightsLabel" for="longFlights">Lange flyninger</label>
+              <small><i><div id="longFlightsInfo">(udenfor EU, 3000 km)</div></i></small>
               <input type="number" id="longFlights" name="longFlights" value="2" required>
             </div>
           </div>
 
           <div class="inline-fields">
             <div style="width: 100%">
-              <label for="clothing">Tøjkøb</label>
+              <label id="clothingLabel" for="clothing">Tøjkøb</label>
               <select id="clothing" name="clothing" required>
-                <option value="5">0-9 styk.</option>
-                <option value="15" selected>10-19 styk.</option>
-                <option value="25">20-29 styk.</option>
-                <option value="35">30-39 styk.</option>
-                <option value="45">40-49 styk.</option>
-                <option value="60">+50 stk. </option>
+                <option id="clothing0-9Option" value="5">0-9 styk.</option>
+                <option id="clothing10-19Option" value="15" selected>10-19 styk.</option>
+                <option id="clothing20-29Option" value="25">20-29 styk.</option>
+                <option id="clothing30-39Option" value="35">30-39 styk.</option>
+                <option id="clothing40-49Option" value="45">40-49 styk.</option>
+                <option id="clothingPlus50Option" value="60">+50 stk. </option>
               </select>
             </div>
 
             <div style="width: 100%">
-              <label for="dietType">Kostvaner</label>
+              <label id="dietTypeLabel" for="dietType">Kostvaner</label>
               <select id="dietType" name="dietType" required>
-                <option value="meat_7">Kød 7 dage om ugen</option>
-                <option value="meat_6" selected>Kød 6 dage om ugen</option>
-                <option value="meat_5">Kød 5 dage om ugen</option>
-                <option value="meat_4">Kød 4 dage om ugen</option>
-                <option value="meat_3">Kød 3 dage om ugen</option>
-                <option value="meat_2">Kød 2 dage om ugen</option>
-                <option value="meat_1">Kød 1 dag om ugen</option>
-                <option value="no_beef">Undgår oksekød</option>
-                <option value="vegetarian">Vegetar</option>
-                <option value="pescatarian">Pescetar</option>
-                <option value="vegan">Veganer</option>
+                <option id="dietTypeMeat7Option" value="meat_7">Kød 7 dage om ugen</option>
+                <option id="dietTypeMeat6Option" value="meat_6">Kød 6 dage om ugen</option>
+                <option id="dietTypeMeat5Option" value="meat_5" selected>Kød 5 dage om ugen</option>
+                <option id="dietTypeMeat4Option" value="meat_4">Kød 4 dage om ugen</option>
+                <option id="dietTypeMeat3Option" value="meat_3">Kød 3 dage om ugen</option>
+                <option id="dietTypeMeat2Option" value="meat_2">Kød 2 dage om ugen</option>
+                <option id="dietTypeMeat1Option" value="meat_1">Kød 1 dag om ugen</option>
+                <option id="dietTypeNoBeefOption" value="no_beef">Undgår oksekød</option>
+                <option id="dietTypeVegetarianOption" value="vegetarian">Vegetar</option>
+                <option id="dietTypePescatarianOption" value="pescatarian">Pescetar</option>
+                <option id="dietTypeVeganOption" value="vegan">Veganer</option>
               </select>
             </div>
           </div>
         </form>
 
         <div id="costDisplay">
-          <p style="margin: 0px 1px;">Prisen for at kompensere for dine <span style="white-space: nowrap">CO₂-udledninger</span>:</p>
+          <p style="margin: 0px 1px;" id="costToOffsetHeading">Prisen for at kompensere for din CO₂:</p>
           <p class="bold-money">
             <span id="costToOffset"></span>
             <span style="color: black">-</span>
             <span style="display: none;" id="mobilepay">
               <a id="mobilepay-link">Betal</a>
             </span>
-            <span style="display: none;" id="klimatrae">
+            <span style="display: 'inline';" id="klimatrae">
               <a target="_blank" id="klimatrae-link">Betal</a>
             </span>
           </p>
@@ -233,33 +233,33 @@
       <div id="explanationContainer">
         <div id="explanationcontent">
           <ul>
-            <li><strong>Bil</strong>: Kilometer pr. år × 0,2 kg CO₂/km.</li>
-            <li><strong>El</strong>: kWh pr. år × 0,233 kg CO₂/kWh. / husstand</li>
-            <li><strong>Varme</strong>: kWh pr. år × CO₂-udledning pr. energikilde. / husstand</li>
-            <li><strong>Flyvninger</strong>: Korte flyvninger × 150 kg CO₂, lange flyvninger × 800 kg CO₂.</li>
-            <li><strong>Tøjkøb</strong>: 10 kg CO₂ per stykke tøj.</li>
-            <li><strong>Kostvaner</strong>: 300 kg CO₂, +200 Vegetar, + 250 Pescetar, +350 Ingen oksekød, +100 pr. køddag</li>
-            <li><strong>Andet</strong>: 500 kg CO₂ (dagligvarer, affald, møbler, elektronik, madspild)</li>
+            <li><strong id="carExplanationName">Bil</strong><span id="carExplanationDescription">: Kilometer pr. år × 0,2 kg CO₂/km.</span></li>
+            <li><strong id="electricityExplanationName">El</strong><span id="electricityExplanationDescription">: kWh pr. år × 0,233 kg CO₂/kWh. / husstand</span></li>
+            <li><strong id="heatingExplanationName">Varme</strong><span id="heatingExplanationDescription">: kWh pr. år × CO₂-udledning pr. energikilde. / husstand</span></li>
+            <li><strong id="flightsExplanationName">Flyvninger</strong><span id="flightsExplanationDescription">: Korte flyvninger × 150 kg CO₂, lange flyvninger × 800 kg CO₂.</span></li>
+            <li><strong id="clothingExplanationName">Tøjkøb</strong><span id="clothingExplanationDescription">: 10 kg CO₂ per stykke tøj.</span></li>
+            <li><strong id="dietExplanationName">Kostvaner</strong><span id="dietExplanationDescription">: 300 kg CO₂, +200 Vegetar, + 250 Pescetar, +350 Ingen oksekød, +100 pr. køddag</span></li>
+            <li><strong id="otherExplanationName">Andet</strong><span id="otherExplanationDescription">: 500 kg CO₂ (dagligvarer, affald, møbler, elektronik, madspild)</span></li>
           </ul>
-          <p style="text-align: center; margin-bottom: 0px;">
+          <p style="text-align: center; margin-bottom: 0px;" id="priceExplanationDescription">
             Prisen for kompensation hos klimatræ.dk er
           </p>
-          <p style="text-align: center; margin-top: 5px;">
-            <b>200 DKK pr. ton CO₂.</b>
+          <p style="text-align: center; margin-top: 5px;" >
+            <b><span id="priceExplanationValue">200</span> <span id="priceExplanationCurrency">DKK</span> <span id="priceExplanationUnit">pr. ton CO₂.<span></b>
           </p>
-
-          <p style="padding: 0px 30px; font-size: 0.8em;"><i><b>Hvordan kan det være så billigt? Er klimakrisen løst?</b><br>Træplantning er en billig måde at kompensere for CO2-udledning på nu, men prisen vil stige i fremtiden. Selvom vi brugte al ledig plads, ville træer ikke kunne opsuge al den CO2, vi udleder, især fordi det tager årtier at optage den mængde, vi slipper ud på sekunder. Træer kan hjælpe med at genoprette økosystemer, men de kan ikke erstatte nødvendige reduktioner i fossile brændstoffer. Den mest effektive løsning er at sænke udledningen, bruge ren energi og beskytte eksisterende skove.</i></p>
+          <p style="padding: 0px 30px; font-size: 0.8em;"><i><b id="explanationInfoHeading">Hvordan kan det være så billigt? Er klimakrisen løst?</b><br><span id="explanationInfoBody">Træplantning er en billig måde at kompensere for CO2-udledning på nu, men prisen vil stige i fremtiden. Selvom vi brugte al ledig plads, ville træer ikke kunne opsuge al den CO2, vi udleder, især fordi det tager årtier at optage den mængde, vi slipper ud på sekunder. Træer kan hjælpe med at genoprette økosystemer, men de kan ikke erstatte nødvendige reduktioner i fossile brændstoffer. Den mest effektive løsning er at sænke udledningen, bruge ren energi og beskytte eksisterende skove.</span></i></p>
 
         </div>
-        <button onclick="toggleForm()">Tilbage til beregning</button>
+        <button onclick="toggleForm()" id="backButton">Tilbage til beregning</button>
       </div>
     </div>
     <script>
+    let CURRENCY_SYMBOL = 'DKK'; // Default currency symbol
     const CAR_CO2_EMISSION_PER_KM_GASOLINE = 0.2;  // kg CO₂ per km for gasoline
     const CAR_CO2_EMISSION_PER_KM_DIESEL = 0.25;   // kg CO₂ per km for diesel
     const CAR_CO2_EMISSION_PER_KM_HYBRID = 0.1;    // kg CO₂ per km for hybrid
     const CAR_CO2_EMISSION_PER_KM_ELECTRIC = 0.05;  // kg CO₂ per km for electric
-    const ELECTRICITY_CO2_EMISSION_PER_KWH = 0.233; // kg CO₂ per kWh
+    let ELECTRICITY_CO2_EMISSION_PER_KWH = 0.233; // kg CO₂ per kWh
     const SHORT_FLIGHT_CO2_EMISSION = 150; // kg CO₂ pr. kort flyvning
     const LONG_FLIGHT_CO2_EMISSION = 800; // kg CO₂ pr. lang flyvning
     const CLOTHING_CO2_EMISSION_PER_ITEM = 10; // kg CO₂ per stykke tøj
@@ -281,15 +281,111 @@
     const BASE_OTHER_EMISSIONS = 500;
 
     // CO₂-udledning pr. kWh for forskellige varmekilder
-    const HEATING_EMISSIONS_ELECTRIC = 0.233;  // Elvarme (samme som elforbrug)
+    let HEATING_EMISSIONS_ELECTRIC = ELECTRICITY_CO2_EMISSION_PER_KWH;  // Elvarme (samme som elforbrug)
     const HEATING_EMISSIONS_GAS = 0.185;      // Naturgas
     const HEATING_EMISSIONS_DISTRICT = 0.05;   // Fjernvarme (kan variere afhængig af kilde)
     const HEATING_EMISSIONS_BIOMASS = 0.035;   // Biomasse
     const HEATING_EMISSIONS_OIL = 0.267;       // Oliefyr
     const HEATING_EMISSIONS_HEATPUMP = 0.05;   // Varmepumpe
 
-    // Pris per ton CO₂ og omregningskurs
-    const PRICE_PER_TON_DKK = 200; // DKK per ton CO₂
+    // Pris per ton CO₂
+    const DKK_PER_TREE = 20;
+    const PRICE_PER_TON_DKK = 200;
+    let PRICE_PER_TON = PRICE_PER_TON_DKK;
+
+    // **************************************** Oversættelser ****************************************
+    const urlParams = new URLSearchParams(window.location.search);
+    let country = urlParams.get('c');
+
+    switch (country) {
+      case 'se':
+        // Adjust electricity CO2 emissions for Sweden
+        ELECTRICITY_CO2_EMISSION_PER_KWH = 0.075; // kg CO₂ per kWh
+
+        // Set the default dietType to 'meat_4' for Sweden
+        document.getElementById('dietType').value = 'meat_4';
+
+        // Adjust currency
+        CURRENCY_SYMBOL = 'SEK';
+        PRICE_PER_TON = 300
+
+        // Translate
+        const translations = {
+          'heading': 'CO₂-kalkylator per år',
+          'householdSizeLabel': 'Personer i hushållet',
+          'carKilometersLabel': 'Kilometer med bil av typ',
+          'carTypeGasolineOption': 'Bensinbil',
+          'carTypeDieselOption': 'Dieselbil',
+          'carTypeHybridOption': 'Hybridbil',
+          'carTypeElectricOption': 'Elbil',
+          'electricCarNotice': '(Elanvändning för elbil måste inkluderas. Kilometer ovan ignoreras.)',
+          'electricityUseLabel': 'El i kWh för hushållet',
+          'heatingUseLabel': 'Värme i kWh för hushållet av typ',
+          'shortFlightsLabel': 'Korta flygresor',
+          'shortFlightsInfo': '(inom EU, 1000 km)',
+          'longFlightsLabel': 'Långa flygresor',
+          'longFlightsInfo': '(utanför EU, 3000 km)',
+          'clothingLabel': 'Klädköp',
+          'dietTypeLabel': 'Kostvanor',
+          'costToOffsetHeading': 'Kostnaden för att kompensera dina CO₂-utsläpp:',
+          'mobilepay-link': 'Betala',
+          'klimatrae-link': 'Betala',
+          'explanationHeading': 'Så här beräknas priset',
+          'carExplanationName': 'Bil',
+          'carExplanationDescription': ': Kilometer per år × 0,2 kg CO₂/km.',
+          'electricityExplanationName': 'El',
+          'electricityExplanationDescription': ': kWh per år × 0,233 kg CO₂/kWh. / hushåll',
+          'heatingExplanationName': 'Värme',
+          'heatingExplanationDescription': ': kWh per år × CO₂-utsläpp per energikälla. / hushåll',
+          'heatingTypeElectricOption': 'Elvärme',
+          'heatingTypeGasOption': 'Naturgas',
+          'heatingTypeDistrictOption': 'Fjärrvärme',
+          'heatingTypeBiomassOption': 'Biomassa',
+          'heatingTypeOliOption': 'Oljepanna',
+          'heatingTypeHeatpumpOption': 'Värmepump',
+          'flightsExplanationName': 'Flygningar',
+          'flightsExplanationDescription': ': Korta flygresor × 150 kg CO₂, långa flygresor × 800 kg CO₂.',
+          'clothingExplanationName': 'Klädköp',
+          'clothingExplanationDescription': ': 10 kg CO₂ per plagg.',
+          'clothing0-9Option': '0-9 stycken.',
+          'clothing10-19Option': '10-19 stycken.',
+          'clothing20-29Option': '20-29 stycken.',
+          'clothing30-39Option': '30-39 stycken.',
+          'clothing40-49Option': '40-49 stycken.',
+          'clothingPlus50Option': '+50 stycken.',
+          'dietExplanationName': 'Matvanor',
+          'dietExplanationDescription': ': 300 kg CO₂, +200 Vegetarisk, + 250 Pescetarisk, +350 Ingen nötkött, +100 per kött dag',
+          'dietTypeMeat7Option': 'Kött 7 dagar i veckan',
+          'dietTypeMeat6Option': 'Kött 6 dagar i veckan',
+          'dietTypeMeat5Option': 'Kött 5 dagar i veckan',
+          'dietTypeMeat4Option': 'Kött 4 dagar i veckan',
+          'dietTypeMeat3Option': 'Kött 3 dagar i veckan',
+          'dietTypeMeat2Option': 'Kött 2 dagar i veckan',
+          'dietTypeMeat1Option': 'Kött 1 dag i veckan',
+          'dietTypeNoBeefOption': 'Undviker nötkött',
+          'dietTypeVegetarianOption': 'Vegetarian',
+          'dietTypePescatarianOption': 'Pescetarian',
+          'dietTypeVeganOption': 'Vegan',
+          'otherExplanationName': 'Övrigt',
+          'otherExplanationDescription': ': 500 kg CO₂ (livsmedel, avfall, möbler, elektronik, matsvinn)',
+          'priceExplanationDescription': 'Priset för kompensation på klimatræ.dk är',
+          'priceExplanationValue': PRICE_PER_TON,
+          'priceExplanationCurrency': CURRENCY_SYMBOL,
+          'priceExplanationUnit': 'per ton CO₂.',
+          'explanationInfoHeading': 'Hur kan det vara så billigt? Är klimatkrisen löst?',
+          'explanationInfoBody': 'Träplantning är ett billigt sätt att kompensera för CO2-utsläpp nu, men priset kommer att stiga i framtiden. Även om vi använde all ledig mark skulle träd inte kunna ta upp all den CO2 vi släpper ut, särskilt eftersom det tar decennier att ta upp den mängd vi släpper ut på sekunder. Träd kan hjälpa till att återställa ekosystem, men de kan inte ersätta nödvändiga minskningar i fossila bränslen. Den mest effektiva lösningen är att sänka utsläppen, använda ren energi och skydda befintliga skogar.',
+          'backButton': 'Tillbaka till beräkning'
+        };
+
+        for (const [key, value] of Object.entries(translations)) {
+          document.getElementById(key).innerText = value;
+        }
+        break;
+      default:
+        country = 'dk';
+        break;
+    }
+    // ********************************************************************************
 
     document.querySelectorAll('#co2Form input, #co2Form select').forEach(input => {
       input.addEventListener('input', updateCO2Cost);
@@ -421,12 +517,14 @@
       const totalEmissions = carEmissions + electricityEmissions + heatingEmissions + shortFlightEmissions + longFlightEmissions + clothingEmissions + otherEmissions;
 
       // Beregn kompensationsprisen
-      const costInDKK = (totalEmissions / 1000) * PRICE_PER_TON_DKK;
+      const totalCost = (totalEmissions / 1000) * PRICE_PER_TON;
+
+      const totalCostDKK = totalCost * (PRICE_PER_TON_DKK / PRICE_PER_TON);
 
       // Opdater prisen dynamisk
-      document.getElementById('costToOffset').innerText = `${costInDKK.toFixed(0)} DKK`;
-      document.getElementById('mobilepay-link').href = `mobilepay://send?phone=45650&amount=${costInDKK.toFixed(0)}`;
-      document.getElementById('klimatrae-link').href = `https://xn--klimatr-sxa.dk/?add-to-cart=120&quantity=${(costInDKK / 20).toFixed(0)}`;
+      document.getElementById('costToOffset').innerText = `${totalCost.toFixed(0)} ${CURRENCY_SYMBOL}`;
+      document.getElementById('mobilepay-link').href = `mobilepay://send?phone=45650&amount=${totalCost.toFixed(0)}`;
+      document.getElementById('klimatrae-link').href = `https://xn--klimatr-sxa.dk/?add-to-cart=120&quantity=${(totalCostDKK / DKK_PER_TREE).toFixed(0)}`;
     }
 
     // Initial beregning
@@ -445,10 +543,9 @@
     });
 
     // Display mobilepay element if on mobile
-    if (/Mobi|Android|iPhone|iPad|iPod/.test(navigator.userAgent)) {
+    if (country == 'dk' && /Mobi|Android|iPhone|iPad|iPod/.test(navigator.userAgent)) {
       document.getElementById('mobilepay').style.display = 'inline';
-    } else {
-      document.getElementById('klimatrae').style.display = 'inline';
+      document.getElementById('klimatrae').style.display = 'none';
     }
 
     document.getElementById('carType').addEventListener('change', function() {
