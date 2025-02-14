@@ -152,7 +152,7 @@
               <div id="electricCarNotice" style="display: none;">(Elforbrug til elbil skal medregnes. Kilometer ovenfor ignoreres.)</div>
             </i>
           </small>
-          <input type="number" id="electricityUse" name="electricityUse" value="3600" required min="0">
+          <input type="number" id="electricityUse" name="electricityUse" value="5867" required min="0">
 
           <label id="heatingUseLabel" for="heatingUse">Varme i kWh for husstanden af type</label>
           <div class="inline-fields">
@@ -169,13 +169,13 @@
 
           <div class="inline-fields">
             <div style="width: 100%">
-              <label id="shortFlightsLabel" for="shortFlights">Korte flyvninger</label>
+              <label id="shortFlightsLabel" for="shortFlights">Korte flyvninger, en vej</label>
               <small><i><div id="shortFlightsInfo">(indenfor EU, 1000 km)</div></i></small>
-              <input type="number" id="shortFlights" name="shortFlights" value="5" required>
+              <input type="number" id="shortFlights" name="shortFlights" value="4" required>
             </div>
 
             <div style="width: 100%">
-              <label id="longFlightsLabel" for="longFlights">Lange flyninger</label>
+              <label id="longFlightsLabel" for="longFlights">Lange flyninger, en vej</label>
               <small><i><div id="longFlightsInfo">(udenfor EU, 3000 km)</div></i></small>
               <input type="number" id="longFlights" name="longFlights" value="2" required>
             </div>
@@ -186,9 +186,9 @@
               <label id="clothingLabel" for="clothing">Tøjkøb</label>
               <select id="clothing" name="clothing" required>
                 <option id="clothing0-9Option" value="5">0-9 styk.</option>
-                <option id="clothing10-19Option" value="15" selected>10-19 styk.</option>
+                <option id="clothing10-19Option" value="15">10-19 styk.</option>
                 <option id="clothing20-29Option" value="25">20-29 styk.</option>
-                <option id="clothing30-39Option" value="35">30-39 styk.</option>
+                <option id="clothing30-39Option" value="35" selected>30-39 styk.</option>
                 <option id="clothing40-49Option" value="45">40-49 styk.</option>
                 <option id="clothingPlus50Option" value="60">+50 stk. </option>
               </select>
@@ -297,6 +297,7 @@
     const urlParams = new URLSearchParams(window.location.search);
     let country = urlParams.get('c');
 
+    let translations;
     switch (country) {
       case 'se':
         // Adjust electricity CO2 emissions for Sweden
@@ -311,7 +312,7 @@
 
         // Translate
         document.title = 'CO₂-kalkylator';
-        const translations = {
+        translations = {
           'heading': 'CO₂-kalkylator per år',
           'householdSizeLabel': 'Personer i hushållet',
           'carKilometersLabel': 'Kilometer med bil av typ',
@@ -322,9 +323,9 @@
           'electricCarNotice': '(Elanvändning för elbil måste inkluderas. Kilometer ovan ignoreras.)',
           'electricityUseLabel': 'El i kWh för hushållet',
           'heatingUseLabel': 'Värme i kWh för hushållet av typ',
-          'shortFlightsLabel': 'Korta flygresor',
+          'shortFlightsLabel': 'Korta flygresor, enkel resa',
           'shortFlightsInfo': '(inom EU, 1000 km)',
-          'longFlightsLabel': 'Långa flygresor',
+          'longFlightsLabel': 'Långa flygresor, enkel resa',
           'longFlightsInfo': '(utanför EU, 3000 km)',
           'clothingLabel': 'Klädköp',
           'dietTypeLabel': 'Kostvanor',
@@ -378,14 +379,179 @@
           'backButton': 'Tillbaka till beräkning'
         };
 
-        for (const [key, value] of Object.entries(translations)) {
-          document.getElementById(key).innerText = value;
-        }
+        break;
+      case 'no':
+        // Juster CO2-utslipp fra strøm for Norge
+        ELECTRICITY_CO2_EMISSION_PER_KWH = 0.018; // kg CO₂ per kWh (Norge har mye vannkraft)
+
+        // Norwegians eat meat 5 days a week on average
+        document.getElementById('dietType').value = 'meat_5';
+
+        // Juster valuta
+        CURRENCY_SYMBOL = 'NOK';
+        PRICE_PER_TON = 320;
+
+        // Oversettelser
+        document.title = 'CO₂-kalkulator';
+        translations = {
+          'heading': 'CO₂-kalkulator per år',
+          'householdSizeLabel': 'Personer i husholdningen',
+          'carKilometersLabel': 'Kilometer med bil av type',
+          'carTypeGasolineOption': 'Bensinbil',
+          'carTypeDieselOption': 'Dieselbil',
+          'carTypeHybridOption': 'Hybridbil',
+          'carTypeElectricOption': 'Elbil',
+          'electricCarNotice': '(Strømforbruk for elbil må inkluderes. Kilometer over ignoreres.)',
+          'electricityUseLabel': 'Strøm i kWh for husholdningen',
+          'heatingUseLabel': 'Oppvarming i kWh for husholdningen av type',
+          'shortFlightsLabel': 'Korte flyreiser, en vei',
+          'shortFlightsInfo': '(innen Europa, 1000 km)',
+          'longFlightsLabel': 'Lange flyreiser, en vei',
+          'longFlightsInfo': '(utenfor Europa, 3000 km)',
+          'clothingLabel': 'Kleskjøp',
+          'dietTypeLabel': 'Kosthold',
+          'costToOffsetHeading': 'Kostnaden for å kompensere dine CO₂-utslipp:',
+          'mobilepay-link': 'Betal',
+          'klimatrae-link': 'Betal',
+          'explanationHeading': 'Slik beregnes prisen',
+          'carExplanationName': 'Bil',
+          'carExplanationDescription': ': Kilometer per år × 0,2 kg CO₂/km.',
+          'electricityExplanationName': 'Strøm',
+          'electricityExplanationDescription': ': kWh per år × 0,018 kg CO₂/kWh. / husholdning',
+          'heatingExplanationName': 'Oppvarming',
+          'heatingExplanationDescription': ': kWh per år × CO₂-utslipp per energikilde. / husholdning',
+          'heatingTypeElectricOption': 'Elektrisk oppvarming',
+          'heatingTypeGasOption': 'Naturgass',
+          'heatingTypeDistrictOption': 'Fjernvarme',
+          'heatingTypeBiomassOption': 'Biomasse',
+          'heatingTypeOliOption': 'Oljefyring',
+          'heatingTypeHeatpumpOption': 'Varmepumpe',
+          'flightsExplanationName': 'Flyreiser',
+          'flightsExplanationDescription': ': Korte flyreiser × 150 kg CO₂, lange flyreiser × 800 kg CO₂.',
+          'clothingExplanationName': 'Kleskjøp',
+          'clothingExplanationDescription': ': 10 kg CO₂ per plagg.',
+          'clothing0-9Option': '0-9 plagg.',
+          'clothing10-19Option': '10-19 plagg.',
+          'clothing20-29Option': '20-29 plagg.',
+          'clothing30-39Option': '30-39 plagg.',
+          'clothing40-49Option': '40-49 plagg.',
+          'clothingPlus50Option': '+50 plagg.',
+          'dietExplanationName': 'Kosthold',
+          'dietExplanationDescription': ': 300 kg CO₂, +200 Vegetarisk, +250 Pescetarian, +350 Ingen storfekjøtt, +100 per kjøttdag',
+          'dietTypeMeat7Option': 'Kjøtt 7 dager i uken',
+          'dietTypeMeat6Option': 'Kjøtt 6 dager i uken',
+          'dietTypeMeat5Option': 'Kjøtt 5 dager i uken',
+          'dietTypeMeat4Option': 'Kjøtt 4 dager i uken',
+          'dietTypeMeat3Option': 'Kjøtt 3 dager i uken',
+          'dietTypeMeat2Option': 'Kjøtt 2 dager i uken',
+          'dietTypeMeat1Option': 'Kjøtt 1 dag i uken',
+          'dietTypeNoBeefOption': 'Unngår storfekjøtt',
+          'dietTypeVegetarianOption': 'Vegetarianer',
+          'dietTypePescatarianOption': 'Pescetarianer',
+          'dietTypeVeganOption': 'Veganer',
+          'otherExplanationName': 'Annet',
+          'otherExplanationDescription': ': 500 kg CO₂ (matvarer, avfall, møbler, elektronikk, matsvinn)',
+          'priceExplanationDescription': 'Prisen for kompensasjon på klimatræ.dk er',
+          'priceExplanationValue': PRICE_PER_TON,
+          'priceExplanationCurrency': CURRENCY_SYMBOL,
+          'priceExplanationUnit': 'per tonn CO₂.',
+          'explanationInfoHeading': 'Hvordan kan det være så billig? Er klimakrisen løst?',
+          'explanationInfoBody': 'Treplanting er en billig måte å kompensere for CO₂-utslipp nå, men prisen vil stige i fremtiden. Selv om vi brukte all ledig mark, ville trær ikke kunne ta opp all CO₂ vi slipper ut, spesielt fordi det tar tiår å absorbere det vi slipper ut på sekunder. Trær kan hjelpe med å gjenopprette økosystemer, men de kan ikke erstatte nødvendige reduksjoner i fossilt brensel. Den mest effektive løsningen er å redusere utslippene, bruke ren energi og beskytte eksisterende skoger.',
+          'backButton': 'Tilbake til beregning'
+        };
+
+        break;
+      case 'fi':
+        // Adjust electricity CO2 emissions for Finland
+        ELECTRICITY_CO2_EMISSION_PER_KWH = 0.100; // kg CO₂ per kWh (Finland has a mixed energy production)
+
+        // Set the default diet type to 'meat_4' for Finland
+        document.getElementById('dietType').value = 'meat_4';
+
+        // Adjust currency
+        CURRENCY_SYMBOL = 'EUR';
+        PRICE_PER_TON = 27;
+
+        // Translations in Finnish
+        document.title = 'CO₂-laskuri';
+        translations = {
+          'heading': 'CO₂-laskuri vuodessa',
+          'householdSizeLabel': 'Henkilöitä kotitaloudessa',
+          'carKilometersLabel': 'Kilometrit autolla, tyyppi',
+          'carTypeGasolineOption': 'Bensiiniauto',
+          'carTypeDieselOption': 'Dieselauto',
+          'carTypeHybridOption': 'Hybridiauto',
+          'carTypeElectricOption': 'Sähköauto',
+          'electricCarNotice': '(Sähkön käyttö sähköautolle on otettava mukaan. Yllä olevat kilometrit ohitetaan.)',
+          'electricityUseLabel': 'Sähkö kWh kotitaloudessa',
+          'heatingUseLabel': 'Lämmitys kWh kotitaloudessa tyypin mukaan',
+          'shortFlightsLabel': 'Lyhyet lennot, suunta',
+          'shortFlightsInfo': '(EU:n sisäiset, 1000 km)',
+          'longFlightsLabel': 'Pitkät lennot, suunta',
+          'longFlightsInfo': '(EU:n ulkopuolelle, 3000 km)',
+          'clothingLabel': 'Vaatteiden ostaminen',
+          'dietTypeLabel': 'Ravitsemustottumukset',
+          'costToOffsetHeading': 'Kustannus kompensoida CO₂-päästöt:',
+          'mobilepay-link': 'Maksaa',
+          'klimatrae-link': 'Maksaa',
+          'explanationHeading': 'Miten hinta lasketaan',
+          'carExplanationName': 'Auto',
+          'carExplanationDescription': ': Kilometrit vuodessa × 0,2 kg CO₂/km.',
+          'electricityExplanationName': 'Sähkö',
+          'electricityExplanationDescription': ': kWh vuodessa × 0,100 kg CO₂/kWh. / kotitalous',
+          'heatingExplanationName': 'Lämmitys',
+          'heatingExplanationDescription': ': kWh vuodessa × CO₂-päästöt energianlähteen mukaan. / kotitalous',
+          'heatingTypeElectricOption': 'Sähkölämmitys',
+          'heatingTypeGasOption': 'Maakaasu',
+          'heatingTypeDistrictOption': 'Kaukolämpö',
+          'heatingTypeBiomassOption': 'Biomassa',
+          'heatingTypeOliOption': 'Öljylämmitys',
+          'heatingTypeHeatpumpOption': 'Lämpöpumppu',
+          'flightsExplanationName': 'Lennot',
+          'flightsExplanationDescription': ': Lyhyet lennot × 150 kg CO₂, pitkät lennot × 800 kg CO₂.',
+          'clothingExplanationName': 'Vaatteiden ostaminen',
+          'clothingExplanationDescription': ': 10 kg CO₂ per vaate.',
+          'clothing0-9Option': '0-9 vaatekappaletta.',
+          'clothing10-19Option': '10-19 vaatekappaletta.',
+          'clothing20-29Option': '20-29 vaatekappaletta.',
+          'clothing30-39Option': '30-39 vaatekappaletta.',
+          'clothing40-49Option': '40-49 vaatekappaletta.',
+          'clothingPlus50Option': '+50 vaatekappaletta.',
+          'dietExplanationName': 'Ravitsemustottumukset',
+          'dietExplanationDescription': ': 300 kg CO₂, +200 Kasvisruoka, +250 Pescatarian, +350 Ei nautakarjaa, +100 lihaa päivässä',
+          'dietTypeMeat7Option': 'Lihaa 7 päivää viikossa',
+          'dietTypeMeat6Option': 'Lihaa 6 päivää viikossa',
+          'dietTypeMeat5Option': 'Lihaa 5 päivää viikossa',
+          'dietTypeMeat4Option': 'Lihaa 4 päivää viikossa',
+          'dietTypeMeat3Option': 'Lihaa 3 päivää viikossa',
+          'dietTypeMeat2Option': 'Lihaa 2 päivää viikossa',
+          'dietTypeMeat1Option': 'Lihaa 1 päivä viikossa',
+          'dietTypeNoBeefOption': 'Vältetään nautakarjaa',
+          'dietTypeVegetarianOption': 'Kasvissyöjä',
+          'dietTypePescatarianOption': 'Pescatarian',
+          'dietTypeVeganOption': 'Vegaani',
+          'otherExplanationName': 'Muu',
+          'otherExplanationDescription': ': 500 kg CO₂ (ruoka, jäte, huonekalut, elektroniikka, ruokahävikki)',
+          'priceExplanationDescription': 'Hinta kompensoimiseksi klimatræ.dk:ssä on',
+          'priceExplanationValue': PRICE_PER_TON,
+          'priceExplanationCurrency': CURRENCY_SYMBOL,
+          'priceExplanationUnit': 'per tonni CO₂.',
+          'explanationInfoHeading': 'Miten se voi olla niin halpaa? Onko ilmastokriisi ratkennut?',
+          'explanationInfoBody': 'Puiden istuttaminen on edullinen tapa kompensoida CO₂-päästöjä nyt, mutta hinta tulee nousemaan tulevaisuudessa. Vaikka käyttäisimme kaiken vapaan maan, puut eivät pystyisi ottamaan vastaan kaikkea CO₂:ta, jonka päästämme ilmaan, erityisesti koska sen ottaminen kestää vuosikymmeniä verrattuna siihen, mitä päästämme ilmaan sekunneissa. Puiden istuttaminen voi auttaa palauttamaan ekosysteemejä, mutta ne eivät voi korvata fossiilisten polttoaineiden käyttöä. Tehokkain ratkaisu on vähentää päästöjä, käyttää puhdasta energiaa ja suojella olemassa olevia metsiä.',
+          'backButton': 'Takaisin laskentaan'
+        };
         break;
       default:
         country = 'dk';
         break;
     }
+
+    if (country != 'dk') {
+      for (const [key, value] of Object.entries(translations)) {
+        document.getElementById(key).innerText = value;
+      }
+    }
+
     // ********************************************************************************
 
     document.querySelectorAll('#co2Form input, #co2Form select').forEach(input => {
