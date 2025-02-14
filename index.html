@@ -217,9 +217,12 @@
         <p style="margin: 0px 1px;">Prisen for at kompensere for dine <span style="white-space: nowrap">CO₂-udledninger</span>:</p>
         <p class="bold-money">
           <span id="costToOffset"></span>
+          <span style="color: black">-</span>
           <span style="display: none;" id="mobilepay">
-            <span style="color: black">-</span>
             <a id="mobilepay-link">Betal</a>
+          </span>
+          <span style="display: none;" id="klimatrae">
+            <a target="_blank" id="klimatrae-link">Betal</a>
           </span>
         </p>
       </div>
@@ -423,6 +426,7 @@
       // Opdater prisen dynamisk
       document.getElementById('costToOffset').innerText = `${costInDKK.toFixed(0)} DKK`;
       document.getElementById('mobilepay-link').href = `mobilepay://send?phone=45650&amount=${costInDKK.toFixed(0)}`;
+      document.getElementById('klimatrae-link').href = `https://xn--klimatr-sxa.dk/?add-to-cart=120&quantity=${(costInDKK / 20).toFixed(0)}`;
     }
 
     // Initial beregning
@@ -443,6 +447,8 @@
     // Display mobilepay element if on mobile
     if (/Mobi|Android|iPhone|iPad|iPod/.test(navigator.userAgent)) {
       document.getElementById('mobilepay').style.display = 'inline';
+    } else {
+      document.getElementById('klimatrae').style.display = 'inline';
     }
 
     document.getElementById('carType').addEventListener('change', function() {
