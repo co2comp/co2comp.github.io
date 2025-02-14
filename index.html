@@ -152,7 +152,7 @@
               <div id="electricCarNotice" style="display: none;">(Elforbrug til elbil skal medregnes. Kilometer ovenfor ignoreres.)</div>
             </i>
           </small>
-          <input type="number" id="electricityUse" name="electricityUse" value="5867" required min="0">
+          <input type="number" id="electricityUse" name="electricityUse" value="5900" required min="0">
 
           <label id="heatingUseLabel" for="heatingUse">Varme i kWh for husstanden af type</label>
           <div class="inline-fields">
@@ -249,6 +249,14 @@
           </p>
           <p style="padding: 0px 30px; font-size: 0.8em;"><i><b id="explanationInfoHeading">Hvordan kan det være så billigt? Er klimakrisen løst?</b><br><span id="explanationInfoBody">Træplantning er en billig måde at kompensere for CO2-udledning på nu, men prisen vil stige i fremtiden. Selvom vi brugte al ledig plads, ville træer ikke kunne opsuge al den CO2, vi udleder, især fordi det tager årtier at optage den mængde, vi slipper ud på sekunder. Træer kan hjælpe med at genoprette økosystemer, men de kan ikke erstatte nødvendige reduktioner i fossile brændstoffer. Den mest effektive løsning er at sænke udledningen, bruge ren energi og beskytte eksisterende skove.</span></i></p>
 
+          <p style="text-align: center; padding: 0px 30px; font-size: 0.4em;">
+            Sources:
+            <a href="https://en.wikipedia.org/wiki/European_countries_by_electricity_consumption_per_person">Electricity</a>,
+            <a href="https://www.carvertical.com/blog/average-mileage-per-year-in-eu-and-us">Milage</a>,
+            <a href="https://www.norden.org/en/news/unfortunate-statistic-nordic-countries-surpass-global-average-clothing-consumption">Clothing</a>,
+            <span>No reliable source for heating, flights, diet, and base emissions were found.</span>
+          </p>
+
         </div>
         <button onclick="toggleForm()" id="backButton">Tilbage til beregning</button>
       </div>
@@ -299,12 +307,100 @@
 
     let translations;
     switch (country) {
+      case 'uk':
+        // Adjust CO2 emissions from electricity for the UK
+        ELECTRICITY_CO2_EMISSION_PER_KWH = 0.233; // kg CO₂ per kWh (UK grid mix)
+
+        // UK average diet includes meat 4 days a week
+        document.getElementById('dietType').value = 'meat_4';
+
+        // Set the default electricity use to the UK average
+        document.getElementById('electricityUse').value = 4300;
+
+        // Set the default heating use to the UK average
+        document.getElementById('heatingType').value = 'gas';
+        document.getElementById('heatingUse').value = 14500;
+
+        // Adjust currency
+        CURRENCY_SYMBOL = '£';
+        PRICE_PER_TON = 23;
+
+        // Translations
+        document.title = 'CO₂ Calculator';
+        translations = {
+          'heading': 'CO₂ Calculator per Year',
+          'householdSizeLabel': 'People in Household',
+          'carKilometersLabel': 'Kilometers driven by car type',
+          'carTypeGasolineOption': 'Petrol Car',
+          'carTypeDieselOption': 'Diesel Car',
+          'carTypeHybridOption': 'Hybrid Car',
+          'carTypeElectricOption': 'Electric Car',
+          'electricCarNotice': '(Electric car consumption must be included. Kilometers above are ignored.)',
+          'electricityUseLabel': 'Electricity in kWh for household',
+          'heatingUseLabel': 'Heating in kWh for household by type',
+          'shortFlightsLabel': 'Short Flights, one way',
+          'shortFlightsInfo': '(within Europe, 1000 km)',
+          'longFlightsLabel': 'Long Flights, one way',
+          'longFlightsInfo': '(outside Europe, 3000 km)',
+          'clothingLabel': 'Clothing Purchases',
+          'dietTypeLabel': 'Diet',
+          'costToOffsetHeading': 'Cost to Offset Your CO₂ Emissions:',
+          'mobilepay-link': 'Pay',
+          'klimatrae-link': 'Pay',
+          'explanationHeading': 'How the Price is Calculated',
+          'carExplanationName': 'Car',
+          'carExplanationDescription': ': Kilometers per year × 0.2 kg CO₂/km.',
+          'electricityExplanationName': 'Electricity',
+          'electricityExplanationDescription': ': kWh per year × 0.233 kg CO₂/kWh. / household',
+          'heatingExplanationName': 'Heating',
+          'heatingExplanationDescription': ': kWh per year × CO₂ emissions per energy source. / household',
+          'heatingTypeElectricOption': 'Electric Heating',
+          'heatingTypeGasOption': 'Natural Gas',
+          'heatingTypeDistrictOption': 'District Heating',
+          'heatingTypeBiomassOption': 'Biomass',
+          'heatingTypeOliOption': 'Oil Heating',
+          'heatingTypeHeatpumpOption': 'Heat Pump',
+          'flightsExplanationName': 'Flights',
+          'flightsExplanationDescription': ': Short flights × 150 kg CO₂, long flights × 800 kg CO₂.',
+          'clothingExplanationName': 'Clothing Purchases',
+          'clothingExplanationDescription': ': 10 kg CO₂ per item.',
+          'dietExplanationName': 'Diet',
+          'dietExplanationDescription': ': 300 kg CO₂, +200 Vegetarian, +250 Pescetarian, +350 No Beef, +100 per meat day',
+          'dietTypeMeat7Option': 'Meat 7 days a week',
+          'dietTypeMeat6Option': 'Meat 6 days a week',
+          'dietTypeMeat5Option': 'Meat 5 days a week',
+          'dietTypeMeat4Option': 'Meat 4 days a week',
+          'dietTypeMeat3Option': 'Meat 3 days a week',
+          'dietTypeMeat2Option': 'Meat 2 days a week',
+          'dietTypeMeat1Option': 'Meat 1 day a week',
+          'dietTypeNoBeefOption': 'Avoids beef',
+          'dietTypeVegetarianOption': 'Vegetarian',
+          'dietTypePescatarianOption': 'Pescatarian',
+          'dietTypeVeganOption': 'Vegan',
+          'otherExplanationName': 'Other',
+          'otherExplanationDescription': ': 500 kg CO₂ (food, waste, furniture, electronics, food waste)',
+          'priceExplanationDescription': 'The compensation price at klimatræ.dk is',
+          'priceExplanationValue': PRICE_PER_TON,
+          'priceExplanationCurrency': CURRENCY_SYMBOL,
+          'priceExplanationUnit': 'per ton CO₂.',
+          'explanationInfoHeading': 'How is it so cheap? Has the climate crisis been solved?',
+          'explanationInfoBody': 'Tree planting is a cheap way to offset CO₂ emissions now, but prices will rise in the future. Even if we used all available land, trees couldn’t absorb all emissions, especially since it takes decades to absorb what we emit in seconds. Trees help restore ecosystems but can’t replace necessary reductions in fossil fuel use. The most effective solution is to reduce emissions, use clean energy, and protect existing forests.',
+          'backButton': 'Back to Calculation'
+        };
+        break;
       case 'se':
         // Adjust electricity CO2 emissions for Sweden
         ELECTRICITY_CO2_EMISSION_PER_KWH = 0.075; // kg CO₂ per kWh
 
         // Set the default dietType to 'meat_4' for Sweden
         document.getElementById('dietType').value = 'meat_4';
+
+        // Set the default electricity use to the Swedish average
+        document.getElementById('electricityUse').value = 12400;
+
+        // Set the default heating use to the Swedish average
+        document.getElementById('heatingType').value = 'district';
+        document.getElementById('heatingUse').value = 20000;
 
         // Adjust currency
         CURRENCY_SYMBOL = 'SEK';
@@ -387,6 +483,13 @@
         // Norwegians eat meat 5 days a week on average
         document.getElementById('dietType').value = 'meat_5';
 
+        // Set the default electricity use to the Norwegian average
+        document.getElementById('electricityUse').value = 23300;
+
+        // Set the default heating use to the Norwegian average
+        document.getElementById('heatingType').value = 'district';
+        document.getElementById('heatingUse').value = 20000;
+
         // Juster valuta
         CURRENCY_SYMBOL = 'NOK';
         PRICE_PER_TON = 320;
@@ -467,6 +570,13 @@
 
         // Set the default diet type to 'meat_4' for Finland
         document.getElementById('dietType').value = 'meat_4';
+
+        // Set the default electricity use to the Finnish average
+        document.getElementById('electricityUse').value = 14700;
+
+        // Set the default heating use to the Finnish average
+        document.getElementById('heatingType').value = 'district';
+        document.getElementById('heatingUse').value = 15000;
 
         // Adjust currency
         CURRENCY_SYMBOL = 'EUR';
