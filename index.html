@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="da">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CO₂-beregner</title>
-  <style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CO₂-beregner</title>
+    <style>
     body {
       font-family: Arial, sans-serif;
       padding: 0;
@@ -119,142 +119,142 @@
     #explanationContainer {
       display: none;
     }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h2>CO₂-beregner pr. år</h2>
-    
-    <div id="formContainer">
-      <form id="co2Form">
-        <label for="householdSize">Personer i din husstand</label>
-        <input type="number" id="householdSize" name="householdSize" value="2" required min="1">
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>CO₂-beregner pr. år</h2>
 
-        <label for="carKilometers">Kilometer i bil af type</label>
-        <div class="inline-fields">
-          <input type="number" id="carKilometers" name="carKilometers" value="14500" required min="0">
-          <select id="carType" name="carType" required>
-            <option value="gasoline">Benzinbil</option>
-            <option value="diesel">Dieselbil</option>
-            <option value="hybrid">Hybridbil</option>
-            <option value="electric">Elbil</option>
-          </select>
-        </div>
+      <div id="formContainer">
+        <form id="co2Form">
+          <label for="householdSize">Personer i din husstand</label>
+          <input type="number" id="householdSize" name="householdSize" value="2" required min="1">
 
-        <small>
-          <i>
-            <div style="visibility: hidden" id="electricCarNoticePlaceholder">[Placeholder]</div>
-          </i>
-        </small>
-        <label for="electricityUse">El i kWh for husstanden</label>
-        <small>
-          <i>
-            <div id="electricCarNotice" style="display: none;">(Elforbrug til elbil skal medregnes. Kilometer ovenfor ignoreres.)</div>
-          </i>
-        </small>
-        <input type="number" id="electricityUse" name="electricityUse" value="3600" required min="0">
-
-        <label for="heatingUse">Varme i kWh for husstanden af type</label>
-        <div class="inline-fields">
-          <input type="number" id="heatingUse" name="heatingUse" value="20000" required min="0">
-          <select id="heatingType" name="heatingType" required>
-            <option value="electric">Elvarme</option>
-            <option value="gas">Naturgas</option>
-            <option value="district" selected>Fjernvarme</option>
-            <option value="biomass">Biomasse</option>
-            <option value="oil">Oliefyr</option>
-            <option value="heatpump">Varmepumpe</option>
-          </select>
-        </div>
-
-        <div class="inline-fields">
-          <div style="width: 100%">
-            <label for="shortFlights">Korte flyvninger</label>
-            <small><i><div>(indenfor EU, 1000 km)</div></i></small>
-            <input type="number" id="shortFlights" name="shortFlights" value="5" required>
-          </div>
-          
-          <div style="width: 100%">
-            <label for="longFlights">Lange flyninger</label>
-            <small><i><div>(udenfor EU, 3000 km)</div></i></small>
-            <input type="number" id="longFlights" name="longFlights" value="2" required>
-          </div>
-        </div>
-
-        <div class="inline-fields">
-          <div style="width: 100%">
-            <label for="clothing">Tøjkøb</label>
-            <select id="clothing" name="clothing" required>
-              <option value="5">0-9 styk.</option>
-              <option value="15" selected>10-19 styk.</option>
-              <option value="25">20-29 styk.</option>
-              <option value="35">30-39 styk.</option>
-              <option value="45">40-49 styk.</option>
-              <option value="60">+50 stk. </option>
+          <label for="carKilometers">Kilometer i bil af type</label>
+          <div class="inline-fields">
+            <input type="number" id="carKilometers" name="carKilometers" value="14500" required min="0">
+            <select id="carType" name="carType" required>
+              <option value="gasoline">Benzinbil</option>
+              <option value="diesel">Dieselbil</option>
+              <option value="hybrid">Hybridbil</option>
+              <option value="electric">Elbil</option>
             </select>
           </div>
 
-          <div style="width: 100%">
-            <label for="dietType">Kostvaner</label>
-            <select id="dietType" name="dietType" required>
-              <option value="meat_7">Kød 7 dage om ugen</option>
-              <option value="meat_6" selected>Kød 6 dage om ugen</option>
-              <option value="meat_5">Kød 5 dage om ugen</option>
-              <option value="meat_4">Kød 4 dage om ugen</option>
-              <option value="meat_3">Kød 3 dage om ugen</option>
-              <option value="meat_2">Kød 2 dage om ugen</option>
-              <option value="meat_1">Kød 1 dag om ugen</option>
-              <option value="no_beef">Undgår oksekød</option>
-              <option value="vegetarian">Vegetar</option>
-              <option value="pescatarian">Pescetar</option>
-              <option value="vegan">Veganer</option>
+          <small>
+            <i>
+              <div style="visibility: hidden" id="electricCarNoticePlaceholder">[Placeholder]</div>
+            </i>
+          </small>
+          <label for="electricityUse">El i kWh for husstanden</label>
+          <small>
+            <i>
+              <div id="electricCarNotice" style="display: none;">(Elforbrug til elbil skal medregnes. Kilometer ovenfor ignoreres.)</div>
+            </i>
+          </small>
+          <input type="number" id="electricityUse" name="electricityUse" value="3600" required min="0">
+
+          <label for="heatingUse">Varme i kWh for husstanden af type</label>
+          <div class="inline-fields">
+            <input type="number" id="heatingUse" name="heatingUse" value="20000" required min="0">
+            <select id="heatingType" name="heatingType" required>
+              <option value="electric">Elvarme</option>
+              <option value="gas">Naturgas</option>
+              <option value="district" selected>Fjernvarme</option>
+              <option value="biomass">Biomasse</option>
+              <option value="oil">Oliefyr</option>
+              <option value="heatpump">Varmepumpe</option>
             </select>
           </div>
-        </div>
-      </form>
 
-      <div id="costDisplay">
-        <p style="margin: 0px 1px;">Prisen for at kompensere for dine <span style="white-space: nowrap">CO₂-udledninger</span>:</p>
-        <p class="bold-money">
-          <span id="costToOffset"></span>
-          <span style="color: black">-</span>
-          <span style="display: none;" id="mobilepay">
-            <a id="mobilepay-link">Betal</a>
-          </span>
-          <span style="display: none;" id="klimatrae">
-            <a target="_blank" id="klimatrae-link">Betal</a>
-          </span>
-        </p>
+          <div class="inline-fields">
+            <div style="width: 100%">
+              <label for="shortFlights">Korte flyvninger</label>
+              <small><i><div>(indenfor EU, 1000 km)</div></i></small>
+              <input type="number" id="shortFlights" name="shortFlights" value="5" required>
+            </div>
+
+            <div style="width: 100%">
+              <label for="longFlights">Lange flyninger</label>
+              <small><i><div>(udenfor EU, 3000 km)</div></i></small>
+              <input type="number" id="longFlights" name="longFlights" value="2" required>
+            </div>
+          </div>
+
+          <div class="inline-fields">
+            <div style="width: 100%">
+              <label for="clothing">Tøjkøb</label>
+              <select id="clothing" name="clothing" required>
+                <option value="5">0-9 styk.</option>
+                <option value="15" selected>10-19 styk.</option>
+                <option value="25">20-29 styk.</option>
+                <option value="35">30-39 styk.</option>
+                <option value="45">40-49 styk.</option>
+                <option value="60">+50 stk. </option>
+              </select>
+            </div>
+
+            <div style="width: 100%">
+              <label for="dietType">Kostvaner</label>
+              <select id="dietType" name="dietType" required>
+                <option value="meat_7">Kød 7 dage om ugen</option>
+                <option value="meat_6" selected>Kød 6 dage om ugen</option>
+                <option value="meat_5">Kød 5 dage om ugen</option>
+                <option value="meat_4">Kød 4 dage om ugen</option>
+                <option value="meat_3">Kød 3 dage om ugen</option>
+                <option value="meat_2">Kød 2 dage om ugen</option>
+                <option value="meat_1">Kød 1 dag om ugen</option>
+                <option value="no_beef">Undgår oksekød</option>
+                <option value="vegetarian">Vegetar</option>
+                <option value="pescatarian">Pescetar</option>
+                <option value="vegan">Veganer</option>
+              </select>
+            </div>
+          </div>
+        </form>
+
+        <div id="costDisplay">
+          <p style="margin: 0px 1px;">Prisen for at kompensere for dine <span style="white-space: nowrap">CO₂-udledninger</span>:</p>
+          <p class="bold-money">
+            <span id="costToOffset"></span>
+            <span style="color: black">-</span>
+            <span style="display: none;" id="mobilepay">
+              <a id="mobilepay-link">Betal</a>
+            </span>
+            <span style="display: none;" id="klimatrae">
+              <a target="_blank" id="klimatrae-link">Betal</a>
+            </span>
+          </p>
+        </div>
       </div>
-    </div>
 
-    <h3 id="explanationHeading"><u>Sådan beregnes prisen</u></h3>
+      <h3 id="explanationHeading"><u>Sådan beregnes prisen</u></h3>
 
-    <div id="explanationContainer">
-      <div id="explanationcontent">
-        <ul>
-          <li><strong>Bil</strong>: Kilometer pr. år × 0,2 kg CO₂/km.</li>
-          <li><strong>El</strong>: kWh pr. år × 0,233 kg CO₂/kWh. / husstand</li>
-          <li><strong>Varme</strong>: kWh pr. år × CO₂-udledning pr. energikilde. / husstand</li>
-          <li><strong>Flyvninger</strong>: Korte flyvninger × 150 kg CO₂, lange flyvninger × 800 kg CO₂.</li>
-          <li><strong>Tøjkøb</strong>: 10 kg CO₂ per stykke tøj.</li>
-          <li><strong>Kostvaner</strong>: 300 kg CO₂, +200 Vegetar, + 250 Pescetar, +350 Ingen oksekød, +100 pr. køddag</li>
-          <li><strong>Andet</strong>: 500 kg CO₂ (dagligvarer, affald, møbler, elektronik, madspild)</li>
-        </ul>
-        <p style="text-align: center; margin-bottom: 0px;">
-          Prisen for kompensation hos klimatræ.dk er
-        </p>
-        <p style="text-align: center; margin-top: 5px;">
-          <b>200 DKK pr. ton CO₂.</b>
-        </p>
+      <div id="explanationContainer">
+        <div id="explanationcontent">
+          <ul>
+            <li><strong>Bil</strong>: Kilometer pr. år × 0,2 kg CO₂/km.</li>
+            <li><strong>El</strong>: kWh pr. år × 0,233 kg CO₂/kWh. / husstand</li>
+            <li><strong>Varme</strong>: kWh pr. år × CO₂-udledning pr. energikilde. / husstand</li>
+            <li><strong>Flyvninger</strong>: Korte flyvninger × 150 kg CO₂, lange flyvninger × 800 kg CO₂.</li>
+            <li><strong>Tøjkøb</strong>: 10 kg CO₂ per stykke tøj.</li>
+            <li><strong>Kostvaner</strong>: 300 kg CO₂, +200 Vegetar, + 250 Pescetar, +350 Ingen oksekød, +100 pr. køddag</li>
+            <li><strong>Andet</strong>: 500 kg CO₂ (dagligvarer, affald, møbler, elektronik, madspild)</li>
+          </ul>
+          <p style="text-align: center; margin-bottom: 0px;">
+            Prisen for kompensation hos klimatræ.dk er
+          </p>
+          <p style="text-align: center; margin-top: 5px;">
+            <b>200 DKK pr. ton CO₂.</b>
+          </p>
 
           <p style="padding: 0px 30px; font-size: 0.8em;"><i><b>Hvordan kan det være så billigt? Er klimakrisen løst?</b><br>Træplantning er en billig måde at kompensere for CO2-udledning på nu, men prisen vil stige i fremtiden. Selvom vi brugte al ledig plads, ville træer ikke kunne opsuge al den CO2, vi udleder, især fordi det tager årtier at optage den mængde, vi slipper ud på sekunder. Træer kan hjælpe med at genoprette økosystemer, men de kan ikke erstatte nødvendige reduktioner i fossile brændstoffer. Den mest effektive løsning er at sænke udledningen, bruge ren energi og beskytte eksisterende skove.</i></p>
 
+        </div>
+        <button onclick="toggleForm()">Tilbage til beregning</button>
       </div>
-      <button onclick="toggleForm()">Tilbage til beregning</button>
     </div>
-  </div>
-  <script>
+    <script>
     const CAR_CO2_EMISSION_PER_KM_GASOLINE = 0.2;  // kg CO₂ per km for gasoline
     const CAR_CO2_EMISSION_PER_KM_DIESEL = 0.25;   // kg CO₂ per km for diesel
     const CAR_CO2_EMISSION_PER_KM_HYBRID = 0.1;    // kg CO₂ per km for hybrid
@@ -263,7 +263,7 @@
     const SHORT_FLIGHT_CO2_EMISSION = 150; // kg CO₂ pr. kort flyvning
     const LONG_FLIGHT_CO2_EMISSION = 800; // kg CO₂ pr. lang flyvning
     const CLOTHING_CO2_EMISSION_PER_ITEM = 10; // kg CO₂ per stykke tøj
-    
+
     // Emissioner fra kostvaner
     const DIET_EMISSIONS_MEAT_7 = 1200; 
     const DIET_EMISSIONS_MEAT_6 = 1100; 
@@ -462,6 +462,6 @@
         carNoticePlaceholder.style.display = 'block';
       }
     });
-  </script>
-</body>
+    </script>
+  </body>
 </html>
