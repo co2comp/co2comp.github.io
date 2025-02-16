@@ -154,16 +154,20 @@
           </small>
           <input type="number" id="electricityUse" name="electricityUse" value="5900" required min="0">
 
-          <label id="heatingUseLabel" for="heatingUse">Varme i kWh for husstanden af type</label>
+          <label id="heatingUseLabel" for="heatingUse">Varme for husstanden af type</label>
           <div class="inline-fields">
             <input type="number" id="heatingUse" name="heatingUse" value="20000" required min="0">
             <select id="heatingType" name="heatingType" required>
-              <option id="heatingTypeElectricOption" value="electric">Elvarme</option>
-              <option id="heatingTypeGasOption" value="gas">Naturgas</option>
-              <option id="heatingTypeDistrictOption" value="district" selected>Fjernvarme</option>
-              <option id="heatingTypeBiomassOption" value="biomass">Biomasse</option>
-              <option id="heatingTypeOliOption" value="oil">Oliefyr</option>
-              <option id="heatingTypeHeatpumpOption" value="heatpump">Varmepumpe</option>
+              <option id="heatingTypeElectricOption" value="electric">Elvarme (kWh)</option>
+              <option id="heatingTypeGasOption" value="gas">Naturgas (kWh)</option>
+              <option id="heatingTypeGasM3Option" value="gas_m3">Naturgas (m³)</option>
+              <option id="heatingTypeDistrictOption" value="district" selected>Fjernvarme (kWh)</option>
+              <option id="heatingTypeDistrictGJOption" value="district_gj">Fjernvarme (GJ)</option>
+              <option id="heatingTypeBiomassOption" value="biomass">Biomasse (kWh)</option>
+              <option id="heatingTypeBiomassM3Option" value="biomass_m3">Biomasse (m³)</option>
+              <option id="heatingTypeOilOption" value="oil">Oliefyr (kWh)</option>
+              <option id="heatingTypeOilLOption" value="oil_l">Oliefyr (L)</option>
+              <option id="heatingTypeHeatpumpOption" value="heatpump">Varmepumpe (kWh)</option>
             </select>
           </div>
 
@@ -247,7 +251,7 @@
           <p style="text-align: center; margin-top: 5px;" >
             <b><span id="priceExplanationValue">200</span> <span id="priceExplanationCurrency">DKK</span> <span id="priceExplanationUnit">pr. ton CO₂.<span></b>
           </p>
-          <p style="padding: 0px 30px; font-size: 0.8em;"><i><b id="explanationInfoHeading">Hvordan kan det være så billigt? Er klimakrisen løst?</b><br><span id="explanationInfoBody">Træplantning er en billig måde at kompensere for CO2-udledning på nu, men prisen vil stige i fremtiden. Selvom vi brugte al ledig plads, ville træer ikke kunne opsuge al den CO2, vi udleder, især fordi det tager årtier at optage den mængde, vi slipper ud på sekunder. Træer kan hjælpe med at genoprette økosystemer, men de kan ikke erstatte nødvendige reduktioner i fossile brændstoffer. Den mest effektive løsning er at sænke udledningen, bruge ren energi og beskytte eksisterende skove.</span></i></p>
+          <p style="padding: 0px 30px; font-size: 0.8em;"><i><b id="explanationInfoHeading">Hvordan kan det være så billigt? Er klimakrisen løst?</b><br><span id="explanationInfoBody">Træplantning er en billig måde at kompensere for CO2-udledning på nu, men prisen vil stige i fremtiden. Selvom vi brugte al ledig plads, ville træer ikke kunne opsuge al den CO2, vi udleder, især fordi det tager årtier at optage den mængde, vi slipper ud på sekunder. Træer kan hjælpe med at genoprette økosystemer, men de kan ikke erstatte nødvendige reduktioner i fossile brændstoffer. Den mest effektive løsningen er at sænke udledningen, bruge ren energi og beskytte eksisterende skove.</span></i></p>
 
           <p style="text-align: center; padding: 0px 30px; font-size: 0.4em;">
             Sources:
@@ -300,6 +304,12 @@
     const PRICE_PER_TON_DKK = 200;
     let PRICE_PER_TON = PRICE_PER_TON_DKK;
 
+    // Unit conversion
+    const M3_GAS_TO_KWH = 11; // 1 m³ natural gas ≈ 11 kWh
+    const M3_BIOMASS_TO_KWH = 2.6; // 1 m³ biomass ≈ 2.6 kWh
+    const L_OIL_TO_KWH = 10; // 1 L oil ≈ 10 kWh
+    const GJ_TO_KWH = 277.778; // 1 GJ = 277.778 kWh
+
     // **************************************** Oversættelser ****************************************
     const urlParams = new URLSearchParams(window.location.search);
     let country = urlParams.get('c');
@@ -336,7 +346,7 @@
           'carTypeElectricOption': 'Electric Car',
           'electricCarNotice': '(Electric car consumption must be included. Kilometers above are ignored.)',
           'electricityUseLabel': 'Electricity in kWh for household',
-          'heatingUseLabel': 'Heating in kWh for household by type',
+          'heatingUseLabel': 'Heating for household by type',
           'shortFlightsLabel': 'Short Flights, one way',
           'shortFlightsInfo': '(within Europe, 1000 km)',
           'longFlightsLabel': 'Long Flights, one way',
@@ -354,11 +364,15 @@
           'heatingExplanationName': 'Heating',
           'heatingExplanationDescription': ': kWh per year × CO₂ emissions per energy source. / household',
           'heatingTypeElectricOption': 'Electric Heating',
-          'heatingTypeGasOption': 'Natural Gas',
-          'heatingTypeDistrictOption': 'District Heating',
-          'heatingTypeBiomassOption': 'Biomass',
-          'heatingTypeOliOption': 'Oil Heating',
-          'heatingTypeHeatpumpOption': 'Heat Pump',
+          'heatingTypeGasOption': 'Natural Gas (kWh)',
+          'heatingTypeGasM3Option': 'Natural Gas (m³)',
+          'heatingTypeDistrictOption': 'District Heating (kWh)',
+          'heatingTypeDistrictGJOption': 'District Heating (GJ)',
+          'heatingTypeBiomassOption': 'Biomass (kWh)',
+          'heatingTypeBiomassM3Option': 'Biomass (m³)',
+          'heatingTypeOilOption': 'Oil Heating (kWh)',
+          'heatingTypeOilLOption': 'Oil Heating (L)',
+          'heatingTypeHeatpumpOption': 'Heat Pump (kWh)',
           'flightsExplanationName': 'Flights',
           'flightsExplanationDescription': ': Short flights × 150 kg CO₂, long flights × 800 kg CO₂.',
           'clothingExplanationName': 'Clothing Purchases',
@@ -374,7 +388,7 @@
           'dietTypeMeat1Option': 'Meat 1 day a week',
           'dietTypeNoBeefOption': 'Avoids beef',
           'dietTypeVegetarianOption': 'Vegetarian',
-          'dietTypePescatarianOption': 'Pescatarian',
+          'dietTypePescatarianOption': 'Pescetarian',
           'dietTypeVeganOption': 'Vegan',
           'otherExplanationName': 'Other',
           'otherExplanationDescription': ': 500 kg CO₂ (food, waste, furniture, electronics, food waste)',
@@ -383,7 +397,7 @@
           'priceExplanationCurrency': CURRENCY_SYMBOL,
           'priceExplanationUnit': 'per ton CO₂.',
           'explanationInfoHeading': 'How is it so cheap? Has the climate crisis been solved?',
-          'explanationInfoBody': 'Tree planting is a cheap way to offset CO₂ emissions now, but prices will rise in the future. Even if we used all available land, trees couldn’t absorb all emissions, especially since it takes decades to absorb what we emit in seconds. Trees help restore ecosystems but can’t replace necessary reductions in fossil fuel use. The most effective solution is to reduce emissions, use clean energy, and protect existing forests.',
+          'explanationInfoBody': "Tree planting is a cheap way to offset CO₂ emissions now, but prices will rise in the future. Even if we used all available land, trees couldn't absorb all emissions, especially since it takes decades to absorb what we emit in seconds. Trees help restore ecosystems but can't replace necessary reductions in fossil fuel use. The most effective solution is to reduce emissions, use clean energy, and protect existing forests.",
           'backButton': 'Back to Calculation'
         };
         break;
@@ -417,7 +431,7 @@
           'carTypeElectricOption': 'Elbil',
           'electricCarNotice': '(Elanvändning för elbil måste inkluderas. Kilometer ovan ignoreras.)',
           'electricityUseLabel': 'El i kWh för hushållet',
-          'heatingUseLabel': 'Värme i kWh för hushållet av typ',
+          'heatingUseLabel': 'Värme för hushållet av typ',
           'shortFlightsLabel': 'Korta flygresor, enkel resa',
           'shortFlightsInfo': '(inom EU, 1000 km)',
           'longFlightsLabel': 'Långa flygresor, enkel resa',
@@ -435,11 +449,15 @@
           'heatingExplanationName': 'Värme',
           'heatingExplanationDescription': ': kWh per år × CO₂-utsläpp per energikälla. / hushåll',
           'heatingTypeElectricOption': 'Elvärme',
-          'heatingTypeGasOption': 'Naturgas',
-          'heatingTypeDistrictOption': 'Fjärrvärme',
-          'heatingTypeBiomassOption': 'Biomassa',
-          'heatingTypeOliOption': 'Oljepanna',
-          'heatingTypeHeatpumpOption': 'Värmepump',
+          'heatingTypeGasOption': 'Naturgas (kWh)',
+          'heatingTypeGasM3Option': 'Naturgas (m³)',
+          'heatingTypeDistrictOption': 'Fjärrvärme (kWh)',
+          'heatingTypeDistrictGJOption': 'Fjärrvärme (GJ)',
+          'heatingTypeBiomassOption': 'Biomassa (kWh)',
+          'heatingTypeBiomassM3Option': 'Biomassa (m³)',
+          'heatingTypeOilOption': 'Oljepanna (kWh)',
+          'heatingTypeOilLOption': 'Oljepanna (L)',
+          'heatingTypeHeatpumpOption': 'Värmepump (kWh)',
           'flightsExplanationName': 'Flygningar',
           'flightsExplanationDescription': ': Korta flygresor × 150 kg CO₂, långa flygresor × 800 kg CO₂.',
           'clothingExplanationName': 'Klädköp',
@@ -470,7 +488,7 @@
           'priceExplanationCurrency': CURRENCY_SYMBOL,
           'priceExplanationUnit': 'per ton CO₂.',
           'explanationInfoHeading': 'Hur kan det vara så billigt? Är klimatkrisen löst?',
-          'explanationInfoBody': 'Träplantning är ett billigt sätt att kompensera för CO2-utsläpp nu, men priset kommer att stiga i framtiden. Även om vi använde all ledig mark skulle träd inte kunna ta upp all den CO2 vi släpper ut, särskilt eftersom det tar decennier att ta upp den mängd vi släpper ut på sekunder. Träd kan hjälpa till att återställa ekosystem, men de kan inte ersätta nödvändiga minskningar i fossila bränslen. Den mest effektiva lösningen är att sänka utsläppen, använda ren energi och skydda befintliga skogar.',
+          'explanationInfoBody': 'Träplantning är ett billigt sätt att kompensera för CO2-utsläpp nu, men priset kommer att stiga i framtiden. Även om vi använde all ledig mark skulle träd inte kunna ta upp all den CO2 vi släpper ut, särskilt eftersom det tar decennier att ta upp den mängd vi släpper ut på sekunder. Träd kan hjälpa till att återställa ekosystemer, men de kan inte ersätta nödvändiga minskningar i fossila bränslen. Den mest effektiva lösningen är att sänka utsläppen, använda ren energi och skydda befintliga skogar.',
           'backButton': 'Tillbaka till beräkning'
         };
 
@@ -496,7 +514,7 @@
         // Oversettelser
         document.title = 'CO₂-kalkulator';
         translations = {
-          'heading': 'CO₂-kalkulator per år',
+          'heading': 'CO₂-kalkylator per år',
           'householdSizeLabel': 'Personer i husholdningen',
           'carKilometersLabel': 'Kilometer med bil av type',
           'carTypeGasolineOption': 'Bensinbil',
@@ -505,7 +523,7 @@
           'carTypeElectricOption': 'Elbil',
           'electricCarNotice': '(Strømforbruk for elbil må inkluderes. Kilometer over ignoreres.)',
           'electricityUseLabel': 'Strøm i kWh for husholdningen',
-          'heatingUseLabel': 'Oppvarming i kWh for husholdningen av type',
+          'heatingUseLabel': 'Oppvarming for husholdningen av type',
           'shortFlightsLabel': 'Korte flyreiser, en vei',
           'shortFlightsInfo': '(innen Europa, 1000 km)',
           'longFlightsLabel': 'Lange flyreiser, en vei',
@@ -523,11 +541,15 @@
           'heatingExplanationName': 'Oppvarming',
           'heatingExplanationDescription': ': kWh per år × CO₂-utslipp per energikilde. / husholdning',
           'heatingTypeElectricOption': 'Elektrisk oppvarming',
-          'heatingTypeGasOption': 'Naturgass',
-          'heatingTypeDistrictOption': 'Fjernvarme',
-          'heatingTypeBiomassOption': 'Biomasse',
-          'heatingTypeOliOption': 'Oljefyring',
-          'heatingTypeHeatpumpOption': 'Varmepumpe',
+          'heatingTypeGasOption': 'Naturgass (kWh)',
+          'heatingTypeGasM3Option': 'Naturgass (m³)',
+          'heatingTypeDistrictOption': 'Fjernvarme (kWh)',
+          'heatingTypeDistrictGJOption': 'Fjernvarme (GJ)',
+          'heatingTypeBiomassOption': 'Biomasse (kWh)',
+          'heatingTypeBiomassM3Option': 'Biomasse (m³)',
+          'heatingTypeOilOption': 'Oljefyring (kWh)',
+          'heatingTypeOilLOption': 'Oljefyring (L)',
+          'heatingTypeHeatpumpOption': 'Varmepumpe (kWh)',
           'flightsExplanationName': 'Flyreiser',
           'flightsExplanationDescription': ': Korte flyreiser × 150 kg CO₂, lange flyreiser × 800 kg CO₂.',
           'clothingExplanationName': 'Kleskjøp',
@@ -593,7 +615,7 @@
           'carTypeElectricOption': 'Elektroauto',
           'electricCarNotice': '(Stromverbrauch für Elektroautos ist zu berücksichtigen. Die oben genannten Kilometer werden ignoriert.)',
           'electricityUseLabel': 'Strom in kWh für Haushaltung',
-          'heatingUseLabel': 'Heizung in kWh für Haushaltung von Typ',
+          'heatingUseLabel': 'Heizung für Haushalt nach Typ',
           'shortFlightsLabel': 'Kurze Flüge, ein Weg',
           'shortFlightsInfo': '(in Europa, 1000 km)',
           'longFlightsLabel': 'Lange Flüge, ein Weg',
@@ -611,11 +633,15 @@
           'heatingExplanationName': 'Heizung',
           'heatingExplanationDescription': ': kWh pro Jahr × CO₂-Emissionen pro Energiequelle. / Haushaltung',
           'heatingTypeElectricOption': 'Elektrische Heizung',
-          'heatingTypeGasOption': 'Gasheizung',
-          'heatingTypeDistrictOption': 'Fernwärme',
-          'heatingTypeBiomassOption': 'Biomasseheizung',
-          'heatingTypeOliOption': 'Ölheizung',
-          'heatingTypeHeatpumpOption': 'Wärmepumpe',
+          'heatingTypeGasOption': 'Erdgas (kWh)',
+          'heatingTypeGasM3Option': 'Erdgas (m³)',
+          'heatingTypeDistrictOption': 'Fernwärme (kWh)',
+          'heatingTypeDistrictGJOption': 'Fernwärme (GJ)',
+          'heatingTypeBiomassOption': 'Biomasse (kWh)',
+          'heatingTypeBiomassM3Option': 'Biomasse (m³)',
+          'heatingTypeOilOption': 'Ölheizung (kWh)',
+          'heatingTypeOilLOption': 'Ölheizung (L)',
+          'heatingTypeHeatpumpOption': 'Wärmepumpe (kWh)',
           'flightsExplanationName': 'Flüge',
           'flightsExplanationDescription': ': Kurze Flüge × 150 kg CO₂, lange Flüge × 800 kg CO₂.',
           'clothingExplanationName': 'Kleidung',
@@ -680,7 +706,7 @@
           'carTypeElectricOption': 'Sähköauto',
           'electricCarNotice': '(Sähkön käyttö sähköautolle on otettava mukaan. Yllä olevat kilometrit ohitetaan.)',
           'electricityUseLabel': 'Sähkö kWh kotitaloudessa',
-          'heatingUseLabel': 'Lämmitys kWh kotitaloudessa tyypin mukaan',
+          'heatingUseLabel': 'Lämmitys kotitaloudelle tyypiltään',
           'shortFlightsLabel': 'Lyhyet lennot, suunta',
           'shortFlightsInfo': '(EU:n sisäiset, 1000 km)',
           'longFlightsLabel': 'Pitkät lennot, suunta',
@@ -698,11 +724,15 @@
           'heatingExplanationName': 'Lämmitys',
           'heatingExplanationDescription': ': kWh vuodessa × CO₂-päästöt energianlähteen mukaan. / kotitalous',
           'heatingTypeElectricOption': 'Sähkölämmitys',
-          'heatingTypeGasOption': 'Maakaasu',
-          'heatingTypeDistrictOption': 'Kaukolämpö',
-          'heatingTypeBiomassOption': 'Biomassa',
-          'heatingTypeOliOption': 'Öljylämmitys',
-          'heatingTypeHeatpumpOption': 'Lämpöpumppu',
+          'heatingTypeGasOption': 'Maakaasu (kWh)',
+          'heatingTypeGasM3Option': 'Maakaasu (m³)',
+          'heatingTypeDistrictOption': 'Kaukolämpö (kWh)',
+          'heatingTypeDistrictGJOption': 'Kaukolämpö (GJ)',
+          'heatingTypeBiomassOption': 'Biomassa (kWh)',
+          'heatingTypeBiomassM3Option': 'Biomassa (m³)',
+          'heatingTypeOilOption': 'Öljylämmitys (kWh)',
+          'heatingTypeOilLOption': 'Öljylämmitys (L)',
+          'heatingTypeHeatpumpOption': 'Lämpöpumppu (kWh)',
           'flightsExplanationName': 'Lennot',
           'flightsExplanationDescription': ': Lyhyet lennot × 150 kg CO₂, pitkät lennot × 800 kg CO₂.',
           'clothingExplanationName': 'Vaatteiden ostaminen',
@@ -805,14 +835,26 @@
         case 'gas':
           heatingEmissionFactor = HEATING_EMISSIONS_GAS;
           break;
+        case 'gas_m3':
+          heatingEmissionFactor = HEATING_EMISSIONS_GAS * M3_GAS_TO_KWH;
+          break;
         case 'district':
           heatingEmissionFactor = HEATING_EMISSIONS_DISTRICT;
+          break;
+        case 'district_gj':
+          heatingEmissionFactor = HEATING_EMISSIONS_DISTRICT * GJ_TO_KWH;
           break;
         case 'biomass':
           heatingEmissionFactor = HEATING_EMISSIONS_BIOMASS;
           break;
+        case 'biomass_m3':
+          heatingEmissionFactor = HEATING_EMISSIONS_BIOMASS * M3_BIOMASS_TO_KWH;
+          break;
         case 'oil':
           heatingEmissionFactor = HEATING_EMISSIONS_OIL;
+          break;
+        case 'oil_l':
+          heatingEmissionFactor = HEATING_EMISSIONS_OIL * L_OIL_TO_KWH;
           break;
         case 'heatpump':
           heatingEmissionFactor = HEATING_EMISSIONS_HEATPUMP;
