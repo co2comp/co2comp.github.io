@@ -263,10 +263,10 @@
     </div>
     <script>
     let CURRENCY_SYMBOL = 'DKK'; // Default currency symbol
-    const CAR_CO2_EMISSION_PER_KM_GASOLINE = 0.2;  // kg CO₂ per km for gasoline
-    const CAR_CO2_EMISSION_PER_KM_DIESEL = 0.25;   // kg CO₂ per km for diesel
+    const CAR_CO2_EMISSION_PER_KM_GASOLINE = 0.175;  // kg CO₂ per km for gasoline
+    const CAR_CO2_EMISSION_PER_KM_DIESEL = 0.135;   // kg CO₂ per km for diesel
     const CAR_CO2_EMISSION_PER_KM_HYBRID = 0.1;    // kg CO₂ per km for hybrid
-    const CAR_CO2_EMISSION_PER_KM_ELECTRIC = 0.05;  // kg CO₂ per km for electric
+    const CAR_KWH_PER_KM_ELECTRIC = 0.2; // kWh per km for electric cars
     let ELECTRICITY_CO2_EMISSION_PER_KWH = 0.233; // kg CO₂ per kWh
     const SHORT_FLIGHT_CO2_EMISSION = 150; // kg CO₂ pr. kort flyvning
     const LONG_FLIGHT_CO2_EMISSION = 800; // kg CO₂ pr. lang flyvning
@@ -289,7 +289,6 @@
     const BASE_OTHER_EMISSIONS = 500;
 
     // CO₂-udledning pr. kWh for forskellige varmekilder
-    let HEATING_EMISSIONS_ELECTRIC = ELECTRICITY_CO2_EMISSION_PER_KWH;  // Elvarme (samme som elforbrug)
     const HEATING_EMISSIONS_GAS = 0.185;      // Naturgas
     const HEATING_EMISSIONS_DISTRICT = 0.05;   // Fjernvarme (kan variere afhængig af kilde)
     const HEATING_EMISSIONS_BIOMASS = 0.035;   // Biomasse
@@ -351,7 +350,7 @@
           'carExplanationName': 'Car',
           'carExplanationDescription': ': Kilometers per year × 0.2 kg CO₂/km.',
           'electricityExplanationName': 'Electricity',
-          'electricityExplanationDescription': ': kWh per year × 0.233 kg CO₂/kWh. / household',
+          'electricityExplanationDescription': `: kWh per year × ${ELECTRICITY_CO2_EMISSION_PER_KWH} kg CO₂/kWh. / household`,
           'heatingExplanationName': 'Heating',
           'heatingExplanationDescription': ': kWh per year × CO₂ emissions per energy source. / household',
           'heatingTypeElectricOption': 'Electric Heating',
@@ -432,7 +431,7 @@
           'carExplanationName': 'Bil',
           'carExplanationDescription': ': Kilometer per år × 0,2 kg CO₂/km.',
           'electricityExplanationName': 'El',
-          'electricityExplanationDescription': ': kWh per år × 0,233 kg CO₂/kWh. / hushåll',
+          'electricityExplanationDescription': `: kWh per år × ${ELECTRICITY_CO2_EMISSION_PER_KWH} kg CO₂/kWh. / hushåll`,
           'heatingExplanationName': 'Värme',
           'heatingExplanationDescription': ': kWh per år × CO₂-utsläpp per energikälla. / hushåll',
           'heatingTypeElectricOption': 'Elvärme',
@@ -520,7 +519,7 @@
           'carExplanationName': 'Bil',
           'carExplanationDescription': ': Kilometer per år × 0,2 kg CO₂/km.',
           'electricityExplanationName': 'Strøm',
-          'electricityExplanationDescription': ': kWh per år × 0,018 kg CO₂/kWh. / husholdning',
+          'electricityExplanationDescription': `: kWh per år × ${ELECTRICITY_CO2_EMISSION_PER_KWH} kg CO₂/kWh. / husholdning`,
           'heatingExplanationName': 'Oppvarming',
           'heatingExplanationDescription': ': kWh per år × CO₂-utslipp per energikilde. / husholdning',
           'heatingTypeElectricOption': 'Elektrisk oppvarming',
@@ -563,6 +562,93 @@
           'backButton': 'Tilbake til beregning'
         };
 
+        break;
+      case 'de':
+        // Adjust electricity CO2 emissions for Germany
+        ELECTRICITY_CO2_EMISSION_PER_KWH = 0.100; // kg CO₂ per kWh (Germany has a mixed energy production)
+
+        // Set the default diet type to 'meat_4' for Germany
+        document.getElementById('dietType').value = 'meat_4';
+
+        // Set the default electricity use to the German average
+        document.getElementById('electricityUse').value = 14700;
+
+        // Set the default heating use to the German average
+        document.getElementById('heatingType').value = 'district';
+        document.getElementById('heatingUse').value = 15000;
+
+        // Adjust currency
+        CURRENCY_SYMBOL = 'EUR';
+        PRICE_PER_TON = 27;
+
+        // Translations in German
+        document.title = 'CO₂-Rechner';
+        translations = {
+          'heading': 'CO₂-Rechner pro Jahr',
+          'householdSizeLabel': 'Personen in der Haushaltung',
+          'carKilometersLabel': 'Kilometer mit Fahrzeugtyp',
+          'carTypeGasolineOption': 'Benzinauto',
+          'carTypeDieselOption': 'Dieselauto',
+          'carTypeHybridOption': 'Hybridauto',
+          'carTypeElectricOption': 'Elektroauto',
+          'electricCarNotice': '(Stromverbrauch für Elektroautos ist zu berücksichtigen. Die oben genannten Kilometer werden ignoriert.)',
+          'electricityUseLabel': 'Strom in kWh für Haushaltung',
+          'heatingUseLabel': 'Heizung in kWh für Haushaltung von Typ',
+          'shortFlightsLabel': 'Kurze Flüge, ein Weg',
+          'shortFlightsInfo': '(in Europa, 1000 km)',
+          'longFlightsLabel': 'Lange Flüge, ein Weg',
+          'longFlightsInfo': '(außerhalb von Europa, 3000 km)',
+          'clothingLabel': 'Kleidung',
+          'dietTypeLabel': 'Ernährung',
+          'costToOffsetHeading': 'Kosten für die Kompensation Ihrer CO₂-Emissionen:',
+          'mobilepay-link': 'Bezahlen',
+          'klimatrae-link': 'Bezahlen',
+          'explanationHeading': 'Wie wird der Preis berechnet',
+          'carExplanationName': 'Auto',
+          'carExplanationDescription': ': Kilometer pro Jahr × 0,2 kg CO₂/km.',
+          'electricityExplanationName': 'Strom',
+          'electricityExplanationDescription': `: kWh pro Jahr × ${ELECTRICITY_CO2_EMISSION_PER_KWH} kg CO₂/kWh. / Haushaltung`,
+          'heatingExplanationName': 'Heizung',
+          'heatingExplanationDescription': ': kWh pro Jahr × CO₂-Emissionen pro Energiequelle. / Haushaltung',
+          'heatingTypeElectricOption': 'Elektrische Heizung',
+          'heatingTypeGasOption': 'Gasheizung',
+          'heatingTypeDistrictOption': 'Fernwärme',
+          'heatingTypeBiomassOption': 'Biomasseheizung',
+          'heatingTypeOliOption': 'Ölheizung',
+          'heatingTypeHeatpumpOption': 'Wärmepumpe',
+          'flightsExplanationName': 'Flüge',
+          'flightsExplanationDescription': ': Kurze Flüge × 150 kg CO₂, lange Flüge × 800 kg CO₂.',
+          'clothingExplanationName': 'Kleidung',
+          'clothingExplanationDescription': ': 10 kg CO₂ pro Kleidung.',
+          'clothing0-9Option': '0-9 Kleidung.',
+          'clothing10-19Option': '10-19 Kleidung.',
+          'clothing20-29Option': '20-29 Kleidung.',
+          'clothing30-39Option': '30-39 Kleidung.',
+          'clothing40-49Option': '40-49 Kleidung.',
+          'clothingPlus50Option': '+50 Kleidung.',
+          'dietExplanationName': 'Ernährung',
+          'dietExplanationDescription': ': 300 kg CO₂, +200 Vegetarisch, +250 Pescetarisch, +350 Keine Großfleischtage, +100 pro Fleischtag',
+          'dietTypeMeat7Option': '7 Fleischtage pro Woche',
+          'dietTypeMeat6Option': '6 Fleischtage pro Woche',
+          'dietTypeMeat5Option': '5 Fleischtage pro Woche',
+          'dietTypeMeat4Option': '4 Fleischtage pro Woche',
+          'dietTypeMeat3Option': '3 Fleischtage pro Woche',
+          'dietTypeMeat2Option': '2 Fleischtage pro Woche',
+          'dietTypeMeat1Option': '1 Fleischtag pro Woche',
+          'dietTypeNoBeefOption': 'Keine Großfleischtage',
+          'dietTypeVegetarianOption': 'Vegetarisch',
+          'dietTypePescatarianOption': 'Pescetarisch',
+          'dietTypeVeganOption': 'Vegan',
+          'otherExplanationName': 'Andere',
+          'otherExplanationDescription': ': 500 kg CO₂ (Lebensmittel, Müll, Möbel, Elektronik, Lebensmittelabfall)',
+          'priceExplanationDescription': 'Preis für Kompensation bei klimatræ.dk:',
+          'priceExplanationValue': PRICE_PER_TON,
+          'priceExplanationCurrency': CURRENCY_SYMBOL,
+          'priceExplanationUnit': 'pro Tonne CO₂.',
+          'explanationInfoHeading': 'Wie kann es so günstig sein? Ist der Klimakrise gelöst?',
+          'explanationInfoBody': 'Die Pflanzung von Bäumen ist ein günstiger Weg, um CO₂-Emissionen zu kompensieren, aber der Preis wird in der Zukunft steigen. Selbst wenn wir alle verfügbaren Landflächen verwendet hätten, würden Bäume nicht genug CO₂ aufnehmen können, das wir herausgeben. Bäume können das Ökosystem wiederherstellen, aber sie können fossile Brennstoffe nicht ersetzen. Die effektivste Lösung ist, die Emissionen zu reduzieren, saubere Energie zu verwenden und die bestehenden Wälder zu schützen.',
+          'backButton': 'Zurück zur Berechnung'
+        };
         break;
       case 'fi':
         // Adjust electricity CO2 emissions for Finland
@@ -608,7 +694,7 @@
           'carExplanationName': 'Auto',
           'carExplanationDescription': ': Kilometrit vuodessa × 0,2 kg CO₂/km.',
           'electricityExplanationName': 'Sähkö',
-          'electricityExplanationDescription': ': kWh vuodessa × 0,100 kg CO₂/kWh. / kotitalous',
+          'electricityExplanationDescription': `: kWh vuodessa × ${ELECTRICITY_CO2_EMISSION_PER_KWH} kg CO₂/kWh. / kotitalous`,
           'heatingExplanationName': 'Lämmitys',
           'heatingExplanationDescription': ': kWh vuodessa × CO₂-päästöt energianlähteen mukaan. / kotitalous',
           'heatingTypeElectricOption': 'Sähkölämmitys',
@@ -703,10 +789,10 @@
           carEmissionFactor = CAR_CO2_EMISSION_PER_KM_HYBRID;
           break;
         case 'electric':
-          carEmissionFactor = CAR_CO2_EMISSION_PER_KM_ELECTRIC;
+          carEmissionFactor = CAR_KWH_PER_KM_ELECTRIC * ELECTRICITY_CO2_EMISSION_PER_KWH;
           break;
         default:
-          carEmissionFactor = CAR_CO2_EMISSION_PER_KM_GASOLINE; // Default to gasoline if not selected
+          alert('Unknown car type');
           break;
       }
 
@@ -714,7 +800,7 @@
       let heatingEmissionFactor;
       switch (heatingType) {
         case 'electric':
-          heatingEmissionFactor = HEATING_EMISSIONS_ELECTRIC;
+          heatingEmissionFactor = ELECTRICITY_CO2_EMISSION_PER_KWH;
           break;
         case 'gas':
           heatingEmissionFactor = HEATING_EMISSIONS_GAS;
@@ -732,7 +818,7 @@
           heatingEmissionFactor = HEATING_EMISSIONS_HEATPUMP;
           break;
         default:
-          heatingEmissionFactor = HEATING_EMISSIONS_ELECTRIC; // Default to electric if not selected
+          alert('Unknown heating type');
           break;
       }
 
@@ -780,7 +866,7 @@
           dietEmissions = DIET_EMISSIONS_VEGAN;
           break;
         default:
-          alert('Ukendt kosttype');
+          alert('Unknown diet type');
           break;
       }
 
