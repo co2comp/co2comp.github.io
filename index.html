@@ -127,8 +127,19 @@
 
       <div id="formContainer">
         <form id="co2Form">
-          <label id="householdSizeLabel" for="householdSize">Personer i din husstand</label>
-          <input type="number" id="householdSize" name="householdSize" value="2" required min="1">
+          <div class="inline-fields">
+            <div style="width: 100%">
+              <label id="householdSizeLabel" for="householdSize">Personer i husstand</label>
+              <input type="number" id="householdSize" name="householdSize" value="2" required min="1">
+            </div>
+            <div style="width: 100%">
+              <label id="housingTypeLabel" for="housingType">Boligtype</label>
+              <select id="housingType" name="housingType" required>
+                <option id="housingTypeHouseOption" value="house" selected>Hus</option>
+                <option id="housingTypeApartmentOption" value="apartment">Lejlighed</option>
+              </select>
+            </div>
+          </div>
 
           <label id="carKilometersLabel" for="carKilometers">Kilometer i bil af type</label>
           <div class="inline-fields">
@@ -146,7 +157,15 @@
               <div style="visibility: hidden" id="electricCarNoticePlaceholder">[Placeholder]</div>
             </i>
           </small>
-          <label id="electricityUseLabel" for="electricityUse">El i kWh for husstanden</label>
+          <label for="electricityUse">
+            <span id="electricityUseLabel"</span>El i kWh for husstanden</span>
+            <small>
+              (<span id="electricityUseDefaultLabel">typisk</span>
+              <span id="electricityUseDefaultMinLabel">5900</span>
+              -
+              <span id="electricityUseDefaultMaxLabel">7500</span>)
+            </small>
+          </label>
           <small>
             <i>
               <div id="electricCarNotice" style="display: none;">(Elforbrug til elbil skal medregnes. Kilometer ovenfor ignoreres.)</div>
@@ -272,6 +291,13 @@
     const CAR_CO2_EMISSION_PER_KM_HYBRID = 0.1;    // kg CO₂ per km for hybrid
     const CAR_KWH_PER_KM_ELECTRIC = 0.2; // kWh per km for electric cars
     let ELECTRICITY_CO2_EMISSION_PER_KWH = 0.233; // kg CO₂ per kWh
+    let ELECTRICITY_USE_DEFAULT_KWH = 5800 // kwh
+    let ELECTRICITY_USE_DEFAULT_HOUSE_MIN_KWH = 3000;
+    let ELECTRICITY_USE_DEFAULT_HOUSE_MAX_KWH = 5000;
+    let ELECTRICITY_USE_DEFAULT_APARTMENT_MIN_KWH = 2000;
+    let ELECTRICITY_USE_DEFAULT_APARTMENT_MAX_KWH = 3000;
+
+
     const SHORT_FLIGHT_CO2_EMISSION = 150; // kg CO₂ pr. kort flyvning
     const LONG_FLIGHT_CO2_EMISSION = 800; // kg CO₂ pr. lang flyvning
     const CLOTHING_CO2_EMISSION_PER_ITEM = 10; // kg CO₂ per stykke tøj
@@ -319,12 +345,14 @@
       case 'uk':
         // Adjust CO2 emissions from electricity for the UK
         ELECTRICITY_CO2_EMISSION_PER_KWH = 0.233; // kg CO₂ per kWh (UK grid mix)
+        ELECTRICITY_USE_DEFAULT_KWH = 4300;
+        ELECTRICITY_USE_DEFAULT_HOUSE_MIN_KWH = 3000;
+        ELECTRICITY_USE_DEFAULT_HOUSE_MAX_KWH = 5000;
+        ELECTRICITY_USE_DEFAULT_APPARTMENT_MIN_KWH = 3000;
+        ELECTRICITY_USE_DEFAULT_APPARTMENT_MAX_KWH = 5000;
 
         // UK average diet includes meat 4 days a week
         document.getElementById('dietType').value = 'meat_4';
-
-        // Set the default electricity use to the UK average
-        document.getElementById('electricityUse').value = 4300;
 
         // Set the default heating use to the UK average
         document.getElementById('heatingType').value = 'gas';
@@ -361,6 +389,7 @@
           'carExplanationDescription': ': Kilometers per year × 0.2 kg CO₂/km.',
           'electricityExplanationName': 'Electricity',
           'electricityExplanationDescription': `: kWh per year × ${ELECTRICITY_CO2_EMISSION_PER_KWH} kg CO₂/kWh. / household`,
+          'electricityUseDefaultLabel': 'Usually',
           'heatingExplanationName': 'Heating',
           'heatingExplanationDescription': ': kWh per year × CO₂ emissions per energy source. / household',
           'heatingTypeElectricOption': 'Electric Heating',
@@ -398,7 +427,10 @@
           'priceExplanationUnit': 'per ton CO₂.',
           'explanationInfoHeading': 'How is it so cheap? Has the climate crisis been solved?',
           'explanationInfoBody': "Tree planting is a cheap way to offset CO₂ emissions now, but prices will rise in the future. Even if we used all available land, trees couldn't absorb all emissions, especially since it takes decades to absorb what we emit in seconds. Trees help restore ecosystems but can't replace necessary reductions in fossil fuel use. The most effective solution is to reduce emissions, use clean energy, and protect existing forests.",
-          'backButton': 'Back to Calculation'
+          'backButton': 'Back to Calculation',
+          'housingTypeLabel': 'Housing Type',
+          'housingTypeHouseOption': 'House',
+          'housingTypeApartmentOption': 'Apartment'
         };
         break;
       case 'se':
@@ -488,8 +520,11 @@
           'priceExplanationCurrency': CURRENCY_SYMBOL,
           'priceExplanationUnit': 'per ton CO₂.',
           'explanationInfoHeading': 'Hur kan det vara så billigt? Är klimatkrisen löst?',
-          'explanationInfoBody': 'Träplantning är ett billigt sätt att kompensera för CO2-utsläpp nu, men priset kommer att stiga i framtiden. Även om vi använde all ledig mark skulle träd inte kunna ta upp all den CO2 vi släpper ut, särskilt eftersom det tar decennier att ta upp den mängd vi släpper ut på sekunder. Träd kan hjälpa till att återställa ekosystemer, men de kan inte ersätta nödvändiga minskningar i fossila bränslen. Den mest effektiva lösningen är att sänka utsläppen, använda ren energi och skydda befintliga skogar.',
-          'backButton': 'Tillbaka till beräkning'
+          'explanationInfoBody': 'Träplantning är ett billigt sätt att kompensera för CO2-utsläpp nu, men priset kommer att stiga i framtiden. Även om vi använde all ledig mark skulle träd inte kunna ta upp all den CO2 vi släpper ut, särskilt eftersom det tar decennier att ta upp den mängd vi släpper ut på sekunder. Träd kan hjelpa till att återställa ekosystemer, men de kan inte ersätta nödvändiga minskningar i fossila bränslen. Den mest effektiva lösningen är att sänka utsläppen, använda ren energi och skydda befintliga skoger.',
+          'backButton': 'Tillbaka till beräkning',
+          'housingTypeLabel': 'Bostadstyp',
+          'housingTypeHouseOption': 'Hus',
+          'housingTypeApartmentOption': 'Lägenhet'
         };
 
         break;
@@ -581,7 +616,10 @@
           'priceExplanationUnit': 'per tonn CO₂.',
           'explanationInfoHeading': 'Hvordan kan det være så billig? Er klimakrisen løst?',
           'explanationInfoBody': 'Treplanting er en billig måte å kompensere for CO₂-utslipp nå, men prisen vil stige i fremtiden. Selv om vi brukte all ledig mark, ville trær ikke kunne ta opp all CO₂ vi slipper ut, spesielt fordi det tar tiår å absorbere det vi slipper ut på sekunder. Trær kan hjelpe med å gjenopprette økosystemer, men de kan ikke erstatte nødvendige reduksjoner i fossilt brensel. Den mest effektive løsningen er å redusere utslippene, bruke ren energi og beskytte eksisterende skoger.',
-          'backButton': 'Tilbake til beregning'
+          'backButton': 'Tilbake til beregning',
+          'housingTypeLabel': 'Boligtype',
+          'housingTypeHouseOption': 'Hus',
+          'housingTypeApartmentOption': 'Leilighet'
         };
 
         break;
@@ -673,7 +711,10 @@
           'priceExplanationUnit': 'pro Tonne CO₂.',
           'explanationInfoHeading': 'Wie kann es so günstig sein? Ist der Klimakrise gelöst?',
           'explanationInfoBody': 'Die Pflanzung von Bäumen ist ein günstiger Weg, um CO₂-Emissionen zu kompensieren, aber der Preis wird in der Zukunft steigen. Selbst wenn wir alle verfügbaren Landflächen verwendet hätten, würden Bäume nicht genug CO₂ aufnehmen können, das wir herausgeben. Bäume können das Ökosystem wiederherstellen, aber sie können fossile Brennstoffe nicht ersetzen. Die effektivste Lösung ist, die Emissionen zu reduzieren, saubere Energie zu verwenden und die bestehenden Wälder zu schützen.',
-          'backButton': 'Zurück zur Berechnung'
+          'backButton': 'Zurück zur Berechnung',
+          'housingTypeLabel': 'Wohnungstyp',
+          'housingTypeHouseOption': 'Haus',
+          'housingTypeApartmentOption': 'Wohnung'
         };
         break;
       case 'fi':
@@ -764,18 +805,90 @@
           'priceExplanationUnit': 'per tonni CO₂.',
           'explanationInfoHeading': 'Miten se voi olla niin halpaa? Onko ilmastokriisi ratkennut?',
           'explanationInfoBody': 'Puiden istuttaminen on edullinen tapa kompensoida CO₂-päästöjä nyt, mutta hinta tulee nousemaan tulevaisuudessa. Vaikka käyttäisimme kaiken vapaan maan, puut eivät pystyisi ottamaan vastaan kaikkea CO₂:ta, jonka päästämme ilmaan, erityisesti koska sen ottaminen kestää vuosikymmeniä verrattuna siihen, mitä päästämme ilmaan sekunneissa. Puiden istuttaminen voi auttaa palauttamaan ekosysteemejä, mutta ne eivät voi korvata fossiilisten polttoaineiden käyttöä. Tehokkain ratkaisu on vähentää päästöjä, käyttää puhdasta energiaa ja suojella olemassa olevia metsiä.',
-          'backButton': 'Takaisin laskentaan'
+          'backButton': 'Takaisin laskentaan',
+          'housingTypeLabel': 'Asuntotyyppi',
+          'housingTypeHouseOption': 'Talo',
+          'housingTypeApartmentOption': 'Asunto'
         };
         break;
       default:
         country = 'dk';
-        break;
+
+        // Danish (default)
+        translations = {
+          'heading': 'CO₂-beregner pr. år',
+          'householdSizeLabel': 'Personer i husstand',
+          'carKilometersLabel': 'Kilometer i bil af type',
+          'carTypeGasolineOption': 'Benzinbil',
+          'carTypeDieselOption': 'Dieselbil',
+          'carTypeHybridOption': 'Hybridbil',
+          'carTypeElectricOption': 'Elbil',
+          'electricCarNotice': '(Elforbrug til elbil skal medregnes. Kilometer ovenfor ignoreres.)',
+          'electricityUseLabel': 'El i kWh for husstanden',
+          'heatingUseLabel': 'Varme for husstanden af type',
+          'shortFlightsLabel': 'Korte flyvninger, en vej',
+          'shortFlightsInfo': '(indenfor EU, 1000 km)',
+          'longFlightsLabel': 'Lange flyninger, en vej',
+          'longFlightsInfo': '(utenfor EU, 3000 km)',
+          'clothingLabel': 'Tøjkøb',
+          'dietTypeLabel': 'Kostvaner',
+          'costToOffsetHeading': 'Prisen for at kompensere for din CO₂:',
+          'mobilepay-link': 'Betal',
+          'klimatrae-link': 'Betal',
+          'explanationHeading': 'Sådan beregnes prisen',
+          'carExplanationName': 'Bil',
+          'carExplanationDescription': ': Kilometer pr. år × 0,2 kg CO₂/km.',
+          'electricityExplanationName': 'El',
+          'electricityExplanationDescription': ': kWh pr. år × CO₂-udledning pr. energikilde. / husstand',
+          'heatingExplanationName': 'Varme',
+          'heatingExplanationDescription': ': kWh pr. år × CO₂-udledning pr. energikilde. / husstand',
+          'heatingTypeElectricOption': 'Elvarme',
+          'heatingTypeGasOption': 'Naturgas (kWh)',
+          'heatingTypeGasM3Option': 'Naturgas (m³)',
+          'heatingTypeDistrictOption': 'Fjernvarme (kWh)',
+          'heatingTypeDistrictGJOption': 'Fjernvarme (GJ)',
+          'heatingTypeBiomassOption': 'Biomasse (kWh)',
+          'heatingTypeBiomassM3Option': 'Biomasse (m³)',
+          'heatingTypeOilOption': 'Oliefyr (kWh)',
+          'heatingTypeOilLOption': 'Oliefyr (L)',
+          'heatingTypeHeatpumpOption': 'Varmepumpe (kWh)',
+          'flightsExplanationName': 'Flyvninger',
+          'flightsExplanationDescription': ': Korte flyvninger × 150 kg CO₂, lange flyvninger × 800 kg CO₂.',
+          'clothingExplanationName': 'Tøjkøb',
+          'clothingExplanationDescription': ': 10 kg CO₂ per stykke tøj.',
+          'dietExplanationName': 'Kostvaner',
+          'dietExplanationDescription': ': 300 kg CO₂, +200 Vegetar, + 250 Pescetar, +350 Ingen oksekød, +100 pr. køddag',
+          'dietTypeMeat7Option': 'Kød 7 dage om ugen',
+          'dietTypeMeat6Option': 'Kød 6 dage om ugen',
+          'dietTypeMeat5Option': 'Kød 5 dage om ugen',
+          'dietTypeMeat4Option': 'Kød 4 dage om ugen',
+          'dietTypeMeat3Option': 'Kød 3 dage om ugen',
+          'dietTypeMeat2Option': 'Kød 2 dage om ugen',
+          'dietTypeMeat1Option': 'Kød 1 dag om ugen',
+          'dietTypeNoBeefOption': 'Undgår oksekød',
+          'dietTypeVegetarianOption': 'Vegetar',
+          'dietTypePescatarianOption': 'Pescetar',
+          'dietTypeVeganOption': 'Veganer',
+          'otherExplanationName': 'Andet',
+          'otherExplanationDescription': ': 500 kg CO₂ (dagligvarer, affald, møbler, elektronik, madspild)',
+          'priceExplanationDescription': 'Prisen for kompensation hos klimatræ.dk er',
+          'priceExplanationValue': PRICE_PER_TON,
+          'priceExplanationCurrency': CURRENCY_SYMBOL,
+          'priceExplanationUnit': 'pr. ton CO₂.',
+          'explanationInfoHeading': 'Hvordan kan det være så billigt? Er klimakrisen løst?',
+          'explanationInfoBody': 'Træplantning er en billig måde at kompensere for CO₂-udledning på nu, men prisen vil stige i fremtiden. Selvom vi brugte al ledig plads, ville træer ikke kunne opsuge al den CO₂, vi udleder, især fordi det tager årtier at optage den mængde, vi slipper ud på sekunder. Træer kan hjælpe med at genoprette økosystemer, men de kan ikke erstatte nødvendige reduktioner i fossile brændstoffer. Den mest effektive løsningen er at sænke udledningen, bruge ren energi og beskytte eksisterende skove.',
+          'backButton': 'Tilbage til beregning',
+          'housingTypeLabel': 'Boligtype',
+          'housingTypeHouseOption': 'Hus',
+          'housingTypeApartmentOption': 'Lejlighed'
+        };
     }
 
-    if (country != 'dk') {
-      for (const [key, value] of Object.entries(translations)) {
-        document.getElementById(key).innerText = value;
-      }
+    // Set the default electricity use as default value
+    document.getElementById('electricityUse').value = ELECTRICITY_USE_DEFAULT_KWH;
+
+    for (const [key, value] of Object.entries(translations)) {
+      document.getElementById(key).innerText = value;
     }
 
     // ********************************************************************************
@@ -964,6 +1077,26 @@
         carNoticePlaceholder.style.display = 'block';
       }
     });
+
+    function updateElectricityDefaults() {
+      const housingType = document.getElementById('housingType').value;
+      const minLabel = document.getElementById('electricityUseDefaultMinLabel');
+      const maxLabel = document.getElementById('electricityUseDefaultMaxLabel');
+      
+      if (housingType === 'house') {
+        minLabel.textContent = ELECTRICITY_USE_DEFAULT_HOUSE_MIN_KWH;
+        maxLabel.textContent = ELECTRICITY_USE_DEFAULT_HOUSE_MAX_KWH;
+      } else {
+        minLabel.textContent = ELECTRICITY_USE_DEFAULT_APARTMENT_MIN_KWH;
+        maxLabel.textContent = ELECTRICITY_USE_DEFAULT_APARTMENT_MAX_KWH;
+      }
+    }
+
+    // Add event listener for housing type changes
+    document.getElementById('housingType').addEventListener('change', updateElectricityDefaults);
+
+    // Call updateElectricityDefaults initially
+    updateElectricityDefaults();
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZM0B3BC8NR"></script>
     <script>
