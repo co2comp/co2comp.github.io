@@ -1195,25 +1195,25 @@
           multiplier = HEATING_EFFICIENCY_GAS;
           break;
         case 'gas_m3':
-          multiplier = HEATING_EFFICIENCY_GAS * M3_GAS_TO_KWH;
+          multiplier = HEATING_EFFICIENCY_GAS / M3_GAS_TO_KWH;
           break;
         case 'district':
           multiplier = HEATING_EFFICIENCY_DISTRICT;
           break;
         case 'district_gj':
-          multiplier = HEATING_EFFICIENCY_DISTRICT * GJ_TO_KWH;
+          multiplier = HEATING_EFFICIENCY_DISTRICT / GJ_TO_KWH;
           break;
         case 'biomass':
           multiplier = HEATING_EFFICIENCY_BIOMASS;
           break;
         case 'biomass_m3':
-          multiplier = HEATING_EFFICIENCY_BIOMASS * M3_BIOMASS_TO_KWH;
+          multiplier = HEATING_EFFICIENCY_BIOMASS / M3_BIOMASS_TO_KWH;
           break;
         case 'oil':
           multiplier = HEATING_EFFICIENCY_OIL;
           break;
         case 'oil_l':
-          multiplier = HEATING_EFFICIENCY_OIL * L_OIL_TO_KWH;
+          multiplier = HEATING_EFFICIENCY_OIL / L_OIL_TO_KWH;
           break;
         case 'heatpump':
           multiplier = HEATING_EFFICIENCY_HEATPUMP;
