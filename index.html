@@ -134,14 +134,21 @@
             </div>
             <div style="width: 100%">
               <label id="housingTypeLabel" for="housingType">Boligtype</label>
-              <select id="housingType" name="housingType" required>
+              <select id="housingTypeSelector" name="housingType" required>
                 <option id="housingTypeHouseOption" value="house" selected>Hus</option>
                 <option id="housingTypeApartmentOption" value="apartment">Lejlighed</option>
               </select>
             </div>
           </div>
 
-          <label id="carKilometersLabel" for="carKilometers">Kilometer i bil af type</label>
+          <label for="carKilometers"><span id="carKilometersLabel">Kilometer i bil af type</span>
+            <small>
+              (<span id="carKilometersDefaultLabel">typisk</span>
+              <span id="carKilometersDefaultMinLabel">12000</span>
+              -
+              <span id="carKilometersDefaultMaxLabel">16000</span>)
+            </small>
+          </label>
           <div class="inline-fields">
             <input type="number" id="carKilometers" name="carKilometers" value="14500" required min="0">
             <select id="carType" name="carType" required>
@@ -173,10 +180,17 @@
           </small>
           <input type="number" id="electricityUse" name="electricityUse" value="5900" required min="0">
 
-          <label id="heatingUseLabel" for="heatingUse">Varme for husstanden af type</label>
+          <label for="heatingUse"><span id="heatingUseLabel">Varme for husstanden af type</span>
+            <small>
+              (<span id="heatingUseDefaultLabel">typisk</span>
+              <span id="heatingUseDefaultMinLabel">15000</span>
+              -
+              <span id="heatingUseDefaultMaxLabel">25000</span>)
+            </small>
+          </label>
           <div class="inline-fields">
             <input type="number" id="heatingUse" name="heatingUse" value="20000" required min="0">
-            <select id="heatingType" name="heatingType" required>
+            <select id="heatingTypeSelector" name="heatingType" required>
               <option id="heatingTypeElectricOption" value="electric">Elvarme (kWh)</option>
               <option id="heatingTypeGasOption" value="gas">Naturgas (kWh)</option>
               <option id="heatingTypeGasM3Option" value="gas_m3">Naturgas (m³)</option>
@@ -293,7 +307,7 @@
     let ELECTRICITY_CO2_EMISSION_PER_KWH = 0.233; // kg CO₂ per kWh
     let ELECTRICITY_USE_DEFAULT_KWH = 5800 // kwh
     let ELECTRICITY_USE_DEFAULT_HOUSE_MIN_KWH = 3000;
-    let ELECTRICITY_USE_DEFAULT_HOUSE_MAX_KWH = 5000;
+    let ELECTRICITY_USE_DEFAULT_HOUSE_MAX_KWH = 7000;
     let ELECTRICITY_USE_DEFAULT_APARTMENT_MIN_KWH = 2000;
     let ELECTRICITY_USE_DEFAULT_APARTMENT_MAX_KWH = 3000;
 
@@ -318,12 +332,27 @@
     // Emissioner fra øvrige kilder
     const BASE_OTHER_EMISSIONS = 500;
 
+    // Electric Heating defaults
+    let HEATING_DEFAULT_KWH = 4300;
+    let HEATING_DEFAULT_HOUSE_MIN_KWH = 3000;
+    let HEATING_DEFAULT_HOUSE_MAX_KWH = 5000;
+    let HEATING_DEFAULT_APPARTMENT_MIN_KWH = 2000;
+    let HEATING_DEFAULT_APPARTMENT_MAX_KWH = 3000;
+
     // CO₂-udledning pr. kWh for forskellige varmekilder
     const HEATING_EMISSIONS_GAS = 0.185;      // Naturgas
     const HEATING_EMISSIONS_DISTRICT = 0.05;   // Fjernvarme (kan variere afhængig af kilde)
     const HEATING_EMISSIONS_BIOMASS = 0.035;   // Biomasse
     const HEATING_EMISSIONS_OIL = 0.267;       // Oliefyr
     const HEATING_EMISSIONS_HEATPUMP = 0.05;   // Varmepumpe
+
+    // Heating efficiency conversion factors
+    const HEATING_EFFICIENCY_ELECTRIC = 1.0;
+    const HEATING_EFFICIENCY_GAS = 0.9;
+    const HEATING_EFFICIENCY_DISTRICT = 1.0;
+    const HEATING_EFFICIENCY_BIOMASS = 0.8;
+    const HEATING_EFFICIENCY_OIL = 0.9;
+    const HEATING_EFFICIENCY_HEATPUMP = 3.75;
 
     // Pris per ton CO₂
     const DKK_PER_TREE = 20;
@@ -351,12 +380,18 @@
         ELECTRICITY_USE_DEFAULT_APPARTMENT_MIN_KWH = 3000;
         ELECTRICITY_USE_DEFAULT_APPARTMENT_MAX_KWH = 5000;
 
+        // Adjust CO2 emissions from heating for the UK
+        HEATING_DEFAULT_KWH = 4300;
+        HEATING_DEFAULT_HOUSE_MIN_KWH = 3000;
+        HEATING_DEFAULT_HOUSE_MAX_KWH = 5000;
+        HEATING_DEFAULT_APPARTMENT_MIN_KWH = 2000;
+        HEATING_DEFAULT_APPARTMENT_MAX_KWH = 3000;
+
         // UK average diet includes meat 4 days a week
         document.getElementById('dietType').value = 'meat_4';
 
         // Set the default heating use to the UK average
-        document.getElementById('heatingType').value = 'gas';
-        document.getElementById('heatingUse').value = 14500;
+        document.getElementById('heatingTypeSelector').value = 'gas';
 
         // Adjust currency
         CURRENCY_SYMBOL = '£';
@@ -430,26 +465,37 @@
           'backButton': 'Back to Calculation',
           'housingTypeLabel': 'Housing Type',
           'housingTypeHouseOption': 'House',
-          'housingTypeApartmentOption': 'Apartment'
+          'housingTypeApartmentOption': 'Apartment',
+          'carKilometersDefaultLabel': 'typically',
+          'heatingUseDefaultLabel': 'typically',
+          'electricityUseDefaultLabel': 'typically',
         };
         break;
       case 'se':
         // Adjust electricity CO2 emissions for Sweden
         ELECTRICITY_CO2_EMISSION_PER_KWH = 0.075; // kg CO₂ per kWh
+        ELECTRICITY_USE_DEFAULT_KWH = 12400; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_HOUSE_MIN_KWH = 10000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_HOUSE_MAX_KWH = 15000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_APARTMENT_MIN_KWH = 8000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_APARTMENT_MAX_KWH = 12000; // Update this value if needed
+
+        // Adjust CO2 emissions from heating for Sweden
+        HEATING_DEFAULT_KWH = 20000;
+        HEATING_DEFAULT_HOUSE_MIN_KWH = 15000;
+        HEATING_DEFAULT_HOUSE_MAX_KWH = 25000;
+        HEATING_DEFAULT_APPARTMENT_MIN_KWH = 10000;
+        HEATING_DEFAULT_APPARTMENT_MAX_KWH = 15000;
 
         // Set the default dietType to 'meat_4' for Sweden
         document.getElementById('dietType').value = 'meat_4';
 
-        // Set the default electricity use to the Swedish average
-        document.getElementById('electricityUse').value = 12400;
-
         // Set the default heating use to the Swedish average
-        document.getElementById('heatingType').value = 'district';
-        document.getElementById('heatingUse').value = 20000;
+        document.getElementById('heatingTypeSelector').value = 'district';
 
         // Adjust currency
         CURRENCY_SYMBOL = 'SEK';
-        PRICE_PER_TON = 300
+        PRICE_PER_TON = 300;
 
         // Translate
         document.title = 'CO₂-kalkylator';
@@ -524,23 +570,35 @@
           'backButton': 'Tillbaka till beräkning',
           'housingTypeLabel': 'Bostadstyp',
           'housingTypeHouseOption': 'Hus',
-          'housingTypeApartmentOption': 'Lägenhet'
+          'housingTypeApartmentOption': 'Lägenhet',
+          'carKilometersDefaultLabel': 'typiskt',
+          'heatingUseDefaultLabel': 'typiskt',
+          'electricityUseDefaultLabel': 'typiskt',
         };
-
         break;
       case 'no':
         // Juster CO2-utslipp fra strøm for Norge
         ELECTRICITY_CO2_EMISSION_PER_KWH = 0.018; // kg CO₂ per kWh (Norge har mye vannkraft)
 
+        // Update default electricity usage values for Norway
+        ELECTRICITY_USE_DEFAULT_KWH = 23300; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_HOUSE_MIN_KWH = 20000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_HOUSE_MAX_KWH = 25000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_APARTMENT_MIN_KWH = 15000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_APARTMENT_MAX_KWH = 20000; // Update this value if needed
+
+        // Adjust CO2 emissions from heating for Norway
+        HEATING_DEFAULT_KWH = 20000;
+        HEATING_DEFAULT_HOUSE_MIN_KWH = 15000;
+        HEATING_DEFAULT_HOUSE_MAX_KWH = 25000;
+        HEATING_DEFAULT_APPARTMENT_MIN_KWH = 10000;
+        HEATING_DEFAULT_APPARTMENT_MAX_KWH = 15000;
+
         // Norwegians eat meat 5 days a week on average
         document.getElementById('dietType').value = 'meat_5';
 
-        // Set the default electricity use to the Norwegian average
-        document.getElementById('electricityUse').value = 23300;
-
         // Set the default heating use to the Norwegian average
-        document.getElementById('heatingType').value = 'district';
-        document.getElementById('heatingUse').value = 20000;
+        document.getElementById('heatingTypeSelector').value = 'district';
 
         // Juster valuta
         CURRENCY_SYMBOL = 'NOK';
@@ -619,23 +677,33 @@
           'backButton': 'Tilbake til beregning',
           'housingTypeLabel': 'Boligtype',
           'housingTypeHouseOption': 'Hus',
-          'housingTypeApartmentOption': 'Leilighet'
+          'housingTypeApartmentOption': 'Leilighet',
+          'carKilometersDefaultLabel': 'typisk',
+          'heatingUseDefaultLabel': 'typisk',
+          'electricityUseDefaultLabel': 'typisk',
         };
-
         break;
       case 'de':
         // Adjust electricity CO2 emissions for Germany
         ELECTRICITY_CO2_EMISSION_PER_KWH = 0.100; // kg CO₂ per kWh (Germany has a mixed energy production)
+        ELECTRICITY_USE_DEFAULT_KWH = 14700; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_HOUSE_MIN_KWH = 12000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_HOUSE_MAX_KWH = 18000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_APARTMENT_MIN_KWH = 10000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_APARTMENT_MAX_KWH = 14000; // Update this value if needed
+
+        // Adjust CO2 emissions from heating for Germany
+        HEATING_DEFAULT_KWH = 15000;
+        HEATING_DEFAULT_HOUSE_MIN_KWH = 12000;
+        HEATING_DEFAULT_HOUSE_MAX_KWH = 18000;
+        HEATING_DEFAULT_APPARTMENT_MIN_KWH = 10000;
+        HEATING_DEFAULT_APPARTMENT_MAX_KWH = 14000;
 
         // Set the default diet type to 'meat_4' for Germany
         document.getElementById('dietType').value = 'meat_4';
 
-        // Set the default electricity use to the German average
-        document.getElementById('electricityUse').value = 14700;
-
         // Set the default heating use to the German average
-        document.getElementById('heatingType').value = 'district';
-        document.getElementById('heatingUse').value = 15000;
+        document.getElementById('heatingTypeSelector').value = 'district';
 
         // Adjust currency
         CURRENCY_SYMBOL = 'EUR';
@@ -714,22 +782,33 @@
           'backButton': 'Zurück zur Berechnung',
           'housingTypeLabel': 'Wohnungstyp',
           'housingTypeHouseOption': 'Haus',
-          'housingTypeApartmentOption': 'Wohnung'
+          'housingTypeApartmentOption': 'Wohnung',
+          'carKilometersDefaultLabel': 'typischerweise',
+          'heatingUseDefaultLabel': 'typischerweise',
+          'electricityUseDefaultLabel': 'typischerweise',
         };
         break;
-      case 'fi':
+      case 'fi':  
         // Adjust electricity CO2 emissions for Finland
         ELECTRICITY_CO2_EMISSION_PER_KWH = 0.100; // kg CO₂ per kWh (Finland has a mixed energy production)
+        ELECTRICITY_USE_DEFAULT_KWH = 14700; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_HOUSE_MIN_KWH = 12000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_HOUSE_MAX_KWH = 18000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_APARTMENT_MIN_KWH = 10000; // Update this value if needed
+        ELECTRICITY_USE_DEFAULT_APARTMENT_MAX_KWH = 14000; // Update this value if needed
+
+        // Adjust CO2 emissions from heating for Finland
+        HEATING_DEFAULT_KWH = 15000;
+        HEATING_DEFAULT_HOUSE_MIN_KWH = 12000;
+        HEATING_DEFAULT_HOUSE_MAX_KWH = 18000;
+        HEATING_DEFAULT_APPARTMENT_MIN_KWH = 10000;
+        HEATING_DEFAULT_APPARTMENT_MAX_KWH = 14000;
 
         // Set the default diet type to 'meat_4' for Finland
         document.getElementById('dietType').value = 'meat_4';
 
-        // Set the default electricity use to the Finnish average
-        document.getElementById('electricityUse').value = 14700;
-
         // Set the default heating use to the Finnish average
-        document.getElementById('heatingType').value = 'district';
-        document.getElementById('heatingUse').value = 15000;
+        document.getElementById('heatingTypeSelector').value = 'district';
 
         // Adjust currency
         CURRENCY_SYMBOL = 'EUR';
@@ -808,7 +887,10 @@
           'backButton': 'Takaisin laskentaan',
           'housingTypeLabel': 'Asuntotyyppi',
           'housingTypeHouseOption': 'Talo',
-          'housingTypeApartmentOption': 'Asunto'
+          'housingTypeApartmentOption': 'Asunto',
+          'carKilometersDefaultLabel': 'tyypillisesti',
+          'heatingUseDefaultLabel': 'tyypillisesti',
+          'electricityUseDefaultLabel': 'tyypillisesti',
         };
         break;
       default:
@@ -880,7 +962,10 @@
           'backButton': 'Tilbage til beregning',
           'housingTypeLabel': 'Boligtype',
           'housingTypeHouseOption': 'Hus',
-          'housingTypeApartmentOption': 'Lejlighed'
+          'housingTypeApartmentOption': 'Lejlighed',
+          'carKilometersDefaultLabel': 'typisk',
+          'heatingUseDefaultLabel': 'typisk',
+          'electricityUseDefaultLabel': 'typisk',
         };
     }
 
@@ -902,7 +987,7 @@
       const dietType = document.getElementById('dietType').value;
       const clothingCount = parseInt(document.getElementById('clothing').value);
       const carType = document.getElementById('carType').value;
-      const heatingType = document.getElementById('heatingType').value;
+      const heatingType = document.getElementById('heatingTypeSelector').value;
 
       let carKilometers = parseFloat(document.getElementById('carKilometers').value); // default 14500;
       let electricityUse = parseFloat(document.getElementById('electricityUse').value); // default 3600;
@@ -1079,7 +1164,7 @@
     });
 
     function updateElectricityDefaults() {
-      const housingType = document.getElementById('housingType').value;
+      const housingType = document.getElementById('housingTypeSelector').value;
       const minLabel = document.getElementById('electricityUseDefaultMinLabel');
       const maxLabel = document.getElementById('electricityUseDefaultMaxLabel');
       
@@ -1092,11 +1177,73 @@
       }
     }
 
+    function updateHeatingDefaults() {
+      const housingType = document.getElementById('housingTypeSelector').value;
+      const heatingType = document.getElementById('heatingTypeSelector').value;
+      const heatingUse = document.getElementById('heatingUse');
+      const heatingUseLabel = document.getElementById('heatingUseDefaultLabel');
+
+      const minLabel = document.getElementById('heatingUseDefaultMinLabel');
+      const maxLabel = document.getElementById('heatingUseDefaultMaxLabel');
+
+      let multiplier = 1;
+      switch (heatingType) {
+        case 'electric':
+          multiplier = HEATING_EFFICIENCY_ELECTRIC;
+          break;
+        case 'gas':
+          multiplier = HEATING_EFFICIENCY_GAS;
+          break;
+        case 'gas_m3':
+          multiplier = HEATING_EFFICIENCY_GAS * M3_GAS_TO_KWH;
+          break;
+        case 'district':
+          multiplier = HEATING_EFFICIENCY_DISTRICT;
+          break;
+        case 'district_gj':
+          multiplier = HEATING_EFFICIENCY_DISTRICT * GJ_TO_KWH;
+          break;
+        case 'biomass':
+          multiplier = HEATING_EFFICIENCY_BIOMASS;
+          break;
+        case 'biomass_m3':
+          multiplier = HEATING_EFFICIENCY_BIOMASS * M3_BIOMASS_TO_KWH;
+          break;
+        case 'oil':
+          multiplier = HEATING_EFFICIENCY_OIL;
+          break;
+        case 'oil_l':
+          multiplier = HEATING_EFFICIENCY_OIL * L_OIL_TO_KWH;
+          break;
+        case 'heatpump':
+          multiplier = HEATING_EFFICIENCY_HEATPUMP;
+          break;
+        default:
+          alert('Unknown heating type');
+          break;
+      }
+
+      if (housingType === 'house') {
+        minLabel.textContent = Math.round(HEATING_DEFAULT_HOUSE_MIN_KWH * multiplier);
+        maxLabel.textContent = Math.round(HEATING_DEFAULT_HOUSE_MAX_KWH * multiplier);
+      } else {
+        minLabel.textContent = Math.round(HEATING_DEFAULT_APPARTMENT_MIN_KWH * multiplier);
+        maxLabel.textContent = Math.round(HEATING_DEFAULT_APPARTMENT_MAX_KWH * multiplier);
+      }
+    };
+
     // Add event listener for housing type changes
-    document.getElementById('housingType').addEventListener('change', updateElectricityDefaults);
+    document.getElementById('housingTypeSelector').addEventListener('change', updateElectricityDefaults);
+
+    // Add event listener for heating type changes
+    document.getElementById('heatingTypeSelector').addEventListener('change', updateHeatingDefaults);
+    document.getElementById('housingTypeSelector').addEventListener('change', updateHeatingDefaults);
 
     // Call updateElectricityDefaults initially
     updateElectricityDefaults();
+
+    // Call updateHeatingDefaults initially
+    updateHeatingDefaults();
     </script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZM0B3BC8NR"></script>
     <script>
