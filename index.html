@@ -140,13 +140,12 @@
 
       <div id="formContainer">
         <form id="co2Form">
+          <label id="householdLabel" for="householdSize">Personer i husstand af type</label>
           <div class="inline-fields">
             <div style="width: 100%">
-              <label id="householdSizeLabel" for="householdSize">Personer i husstand</label>
               <input type="number" id="householdSize" name="householdSize" value="2" required min="1">
             </div>
             <div style="width: 100%">
-              <label id="housingTypeLabel" for="housingTypeSelector">Boligtype</label>
               <select id="housingTypeSelector" name="housingType" required>
                 <option id="housingTypeHouseOption" value="house" selected>Hus</option>
                 <option id="housingTypeApartmentOption" value="apartment">Lejlighed</option>
@@ -385,7 +384,7 @@
 
     const englishTranslations = {
       'heading': 'CO₂ Calculator per Year',
-      'householdSizeLabel': 'People in Household',
+      'householdLabel': 'People in household of type',
       'carKilometersLabel': 'Kilometers driven by car type',
       'carTypeGasolineOption': 'Petrol Car',
       'carTypeDieselOption': 'Diesel Car',
@@ -447,7 +446,6 @@
       'explanationInfoHeading': 'How is it so cheap? Has the climate crisis been solved?',
       'explanationInfoBody': "Tree planting is a cheap way to offset CO₂ emissions now, but prices will rise in the future. Even if we used all available land, trees couldn't absorb all emissions, especially since it takes decades to absorb what we emit in seconds. Trees help restore ecosystems but can't replace necessary reductions in fossil fuel use. The most effective solution is to reduce emissions, use clean energy, and protect existing forests.",
       'backButton': 'Back to Calculation',
-      'housingTypeLabel': 'Housing Type',
       'housingTypeHouseOption': 'House',
       'housingTypeApartmentOption': 'Apartment',
       'carKilometersDefaultLabel': 'typically',
@@ -524,7 +522,7 @@
         document.querySelector('meta[name="keywords"]').content = "CO2-Rechner, CO2-Fußabdruck, Klimawandel, CO2-Kompensation, Baumpflanzung";
         translations = {
           'heading': 'CO₂-kalkylator per år',
-          'householdSizeLabel': 'Personer i hushållet',
+          'householdLabel': 'Personer i hushållet av typ',
           'carKilometersLabel': 'Kilometer med bil av typ',
           'carTypeGasolineOption': 'Bensinbil',
           'carTypeDieselOption': 'Dieselbil',
@@ -591,7 +589,6 @@
           'explanationInfoHeading': 'Hur kan det vara så billigt? Är klimatkrisen löst?',
           'explanationInfoBody': 'Träplantning är ett billigt sätt att kompensera för CO2-utsläpp nu, men priset kommer att stiga i framtiden. Även om vi använde all ledig mark skulle träd inte kunna ta upp all den CO2 vi släpper ut, särskilt eftersom det tar decennier att ta upp den mängd vi släpper ut på sekunder. Träd kan hjelpa till att återställa ekosystemer, men de kan inte ersätta nödvändiga minskningar i fossila bränslen. Den mest effektiva lösningen är att sänka utsläppen, använda ren energi och skydda befintliga skoger.',
           'backButton': 'Tillbaka till beräkning',
-          'housingTypeLabel': 'Bostadstyp',
           'housingTypeHouseOption': 'Hus',
           'housingTypeApartmentOption': 'Lägenhet',
           'carKilometersDefaultLabel': 'typiskt',
@@ -635,7 +632,7 @@
         document.querySelector('meta[name="keywords"]').content = "CO2-kalkulator, karbonavtrykk, klimaendringer, CO2-utjevning, treplanting";
         translations = {
           'heading': 'CO₂-kalkylator per år',
-          'householdSizeLabel': 'Personer i husholdningen',
+          'householdLabel': 'Personer i hushållet av typ',
           'carKilometersLabel': 'Kilometer med bil av type',
           'carTypeGasolineOption': 'Bensinbil',
           'carTypeDieselOption': 'Dieselbil',
@@ -702,7 +699,6 @@
           'explanationInfoHeading': 'Hvordan kan det være så billig? Er klimakrisen løst?',
           'explanationInfoBody': 'Treplanting er en billig måte å kompensere for CO₂-utslipp nå, men prisen vil stige i fremtiden. Selv om vi brukte all ledig mark, ville trær ikke kunne ta opp all CO₂ vi slipper ut, spesielt fordi det tar tiår å absorbere det vi slipper ut på sekunder. Trær kan hjelpe med å gjenopprette økosystemer, men de kan ikke erstatte nødvendige reduksjoner i fossilt brensel. Den mest effektive løsningen er å redusere utslippene, bruke ren energi og beskytte eksisterende skoger.',
           'backButton': 'Tilbake til beregning',
-          'housingTypeLabel': 'Boligtype',
           'housingTypeHouseOption': 'Hus',
           'housingTypeApartmentOption': 'Leilighet',
           'carKilometersDefaultLabel': 'typisk',
@@ -744,7 +740,7 @@
         document.querySelector('meta[name="keywords"]').content = "CO2-Rechner, CO2-Fußabdruck, Klimawandel, CO2-Kompensation, Baumpflanzung";
         translations = {
           'heading': 'CO₂-Rechner pro Jahr',
-          'householdSizeLabel': 'Personen in der Haushaltung',
+          'householdLabel': 'Personen im Haushalt nach Typ',
           'carKilometersLabel': 'Kilometer mit Fahrzeugtyp',
           'carTypeGasolineOption': 'Benzinauto',
           'carTypeDieselOption': 'Dieselauto',
@@ -811,7 +807,6 @@
           'explanationInfoHeading': 'Wie kann es so günstig sein? Ist der Klimakrise gelöst?',
           'explanationInfoBody': 'Die Pflanzung von Bäumen ist ein günstiger Weg, um CO₂-Emissionen zu kompensieren, aber der Preis wird in der Zukunft steigen. Selbst wenn wir alle verfügbaren Landflächen verwendet hätten, würden Bäume nicht genug CO₂ aufnehmen können, das wir herausgeben. Bäume können das Ökosystem wiederherstellen, aber sie können fossile Brennstoffe nicht ersetzen. Die effektivste Lösung ist, die Emissionen zu reduzieren, saubere Energie zu verwenden und die bestehenden Wälder zu schützen.',
           'backButton': 'Zurück zur Berechnung',
-          'housingTypeLabel': 'Wohnungstyp',
           'housingTypeHouseOption': 'Haus',
           'housingTypeApartmentOption': 'Wohnung',
           'carKilometersDefaultLabel': 'typischerweise',
@@ -853,7 +848,7 @@
         document.querySelector('meta[name="keywords"]').content = "CO2-laskuri, hiilijalanjälki, ilmastonmuutos, CO2-kompensaatio, puun kasvatus";
         translations = {
           'heading': 'CO₂-laskuri vuodessa',
-          'householdSizeLabel': 'Henkilöitä kotitaloudessa',
+          'householdLabel': 'Henkilöt taloudessa tyypin mukaan',
           'carKilometersLabel': 'Kilometrit autolla, tyyppi',
           'carTypeGasolineOption': 'Bensiiniauto',
           'carTypeDieselOption': 'Dieselauto',
@@ -920,7 +915,6 @@
           'explanationInfoHeading': 'Miten se voi olla niin halpaa? Onko ilmastokriisi ratkennut?',
           'explanationInfoBody': 'Puiden istuttaminen on edullinen tapa kompensoida CO₂-päästöjä nyt, mutta hinta tulee nousemaan tulevaisuudessa. Vaikka käyttäisimme kaiken vapaan maan, puut eivät pystyisi ottamaan vastaan kaikkea CO₂:ta, jonka päästämme ilmaan, erityisesti koska sen ottaminen kestää vuosikymmeniä verrattuna siihen, mitä päästämme ilmaan sekunneissa. Puiden istuttaminen voi auttaa palauttamaan ekosysteemejä, mutta ne eivät voi korvata fossiilisten polttoaineiden käyttöä. Tehokkain ratkaisu on vähentää päästöjä, käyttää puhdasta energiaa ja suojella olemassa olevia metsiä.',
           'backButton': 'Takaisin laskentaan',
-          'housingTypeLabel': 'Asuntotyyppi',
           'housingTypeHouseOption': 'Talo',
           'housingTypeApartmentOption': 'Asunto',
           'carKilometersDefaultLabel': 'tyypillisesti',
@@ -934,7 +928,7 @@
         // Danish (default)
         translations = {
           'heading': 'CO₂-beregner pr. år',
-          'householdSizeLabel': 'Personer i husstand',
+          'householdLabel': 'Personer i husstanden af type',
           'carKilometersLabel': 'Kilometer i bil af type',
           'carTypeGasolineOption': 'Benzinbil',
           'carTypeDieselOption': 'Dieselbil',
@@ -995,7 +989,6 @@
           'explanationInfoHeading': 'Hvordan kan det være så billigt? Er klimakrisen løst?',
           'explanationInfoBody': 'Træplantning er en billig måde at kompensere for CO₂-udledning på nu, men prisen vil stige i fremtiden. Selvom vi brugte al ledig plads, ville træer ikke kunne opsuge al den CO₂, vi udleder, især fordi det tager årtier at optage den mængde, vi slipper ud på sekunder. Træer kan hjælpe med at genoprette økosystemer, men de kan ikke erstatte nødvendige reduktioner i fossile brændstoffer. Den mest effektive løsningen er at sænke udledningen, bruge ren energi og beskytte eksisterende skove.',
           'backButton': 'Tilbage til beregning',
-          'housingTypeLabel': 'Boligtype',
           'housingTypeHouseOption': 'Hus',
           'housingTypeApartmentOption': 'Lejlighed',
           'carKilometersDefaultLabel': 'typisk',
