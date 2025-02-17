@@ -11,15 +11,19 @@
     body {
       font-family: Arial, sans-serif;
       padding: 0;
-      background-color: #f3f3f3;
+      background-color: rgb(223 234 204);
       display: flex;
       justify-content: center;
       align-items: center;
       flex-direction: column;
       min-height: 100vh;
+      color: rgb(63 79 91);
+    }
+    a {
+      color: black;
     }
     .container {
-      background-color: white;
+      background-color: rgb(251 255 244);
       padding: 10px;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -27,12 +31,12 @@
       max-width: 600px;
       margin-bottom: 20px;
     }
-    h1, h2, h3 {
+    h1, h2, h3, h4 {
       text-align: center;
-      color: #333;
       margin-top: 0px;
     }
-    h3 {
+    h4 {
+      text-decoration: underline;
       cursor: pointer;
     }
     label {
@@ -46,11 +50,11 @@
       border-radius: 5px;
       border: 1px solid #ccc;
       box-sizing: border-box;
-      height: 38px; /* Explicitly set height for consistency */
-      -webkit-appearance: none; /* Reset Safari's default styling */
+      height: 38px;
+      -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
-      background: #fff; /* Set background color */
+      background: #fff;
     }
     input[type="number"] {
       -moz-appearance: textfield;
@@ -61,31 +65,20 @@
       font-size: 1.2em;
       text-align: center;
     }
-    #paymentDiv {
-      text-align: center;
-    }
     .bold-money {
       font-weight: bold;
       font-size: 1.5em;
       margin-top: 10px;
-      color: #4CAF50;
-    }
-    .explanation {
-      font-size: 0.9em;
-      background-color: #e9e9e9;
-      padding: 10px;
-      border-radius: 5px;
-      margin-top: 20px;
+      color: rgb(98 137 111);
     }
     #costDisplay {
       text-align: center;
     }
 
-    /* Mobile friendly adjustments */
     @media only screen and (max-width: 600px) {
       .container {
-        margin: 0 10px; /* Add padding to left and right sides */
-        padding: 20px 0px; /* Add padding on left and right for mobile */
+        margin: 0 10px;
+        padding: 20px 0px;
       }
 
       input, select {
@@ -94,7 +87,7 @@
         border-radius: 5px;
         border: 1px solid #ccc;
         width: 100%;
-        box-sizing: border-box; /* Ensure padding is included in the width */
+        box-sizing: border-box;
       }
 
       small {
@@ -113,7 +106,7 @@
     .inline-fields {
       display: flex;
       justify-content: space-between;
-      gap: 20px; /* Space between the two sets of label/select pairs */
+      gap: 20px;
     }
     .inline-fields label {
       margin-right: 10px;
@@ -275,12 +268,13 @@
             </span>
           </p>
         </div>
-      </div>
 
-      <h3 id="explanationHeading"><u>Sådan beregnes prisen</u></h3>
+        <h4 id="explanationHeading">Sådan beregnes prisen</h4>
+      </div>
 
       <div id="explanationContainer">
         <div id="explanationcontent">
+          <h3>Sådan beregnes prisen</h3>
           <ul>
             <li><strong id="carExplanationName">Bil</strong><span id="carExplanationDescription">: Kilometer pr. år × 0,2 kg CO₂/km.</span></li>
             <li><strong id="electricityExplanationName">El</strong><span id="electricityExplanationDescription">: kWh pr. år × 0,233 kg CO₂/kWh. / husstand</span></li>
@@ -298,6 +292,8 @@
           </p>
           <p style="padding: 0px 30px; font-size: 0.8em;"><i><b id="explanationInfoHeading">Hvordan kan det være så billigt? Er klimakrisen løst?</b><br><span id="explanationInfoBody">Træplantning er en billig måde at kompensere for CO2-udledning på nu, men prisen vil stige i fremtiden. Selvom vi brugte al ledig plads, ville træer ikke kunne opsuge al den CO2, vi udleder, især fordi det tager årtier at optage den mængde, vi slipper ud på sekunder. Træer kan hjælpe med at genoprette økosystemer, men de kan ikke erstatte nødvendige reduktioner i fossile brændstoffer. Den mest effektive løsningen er at sænke udledningen, bruge ren energi og beskytte eksisterende skove.</span></i></p>
 
+          <h4 onclick="toggleForm()" id="backButton">Tilbage til beregning</h4>
+
           <p style="text-align: center; padding: 0px 30px; font-size: 0.4em;">
             Sources:
             <a href="https://en.wikipedia.org/wiki/European_countries_by_electricity_consumption_per_person">Electricity</a>,
@@ -305,9 +301,7 @@
             <a href="https://www.norden.org/en/news/unfortunate-statistic-nordic-countries-surpass-global-average-clothing-consumption">Clothing</a>,
             <span>No reliable source for heating, flights, diet, and base emissions were found.</span>
           </p>
-
         </div>
-        <button onclick="toggleForm()" id="backButton">Tilbage til beregning</button>
       </div>
     </div>
     <script>
