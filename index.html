@@ -271,12 +271,12 @@
           </p>
         </div>
 
-        <h4 id="explanationHeading">Sådan beregnes prisen</h4>
+        <h4 id="explanationLink">Sådan beregnes prisen</h4>
       </div>
 
       <div id="explanationContainer">
         <div id="explanationcontent">
-          <h3>Sådan beregnes prisen</h3>
+          <h3 id="explanationHeading">Sådan beregnes prisen</h3>
           <ul>
             <li><strong id="carExplanationName">Bil</strong><span id="carExplanationDescription">: Kilometer pr. år × 0,2 kg CO₂/km.</span></li>
             <li><strong id="electricityExplanationName">El</strong><span id="electricityExplanationDescription">: kWh pr. år × 0,233 kg CO₂/kWh. / husstand</span></li>
@@ -399,6 +399,7 @@
       'mobilepay-link': 'Pay',
       'klimatrae-link': 'Pay',
       'explanationHeading': 'How the Price is Calculated',
+      'explanationLink': 'How the Price is Calculated',
       'carExplanationName': 'Car',
       'carExplanationDescription': ': Kilometers per year × 0.2 kg CO₂/km.',
       'electricityExplanationName': 'Electricity',
@@ -537,6 +538,7 @@
           'mobilepay-link': 'Betala',
           'klimatrae-link': 'Betala',
           'explanationHeading': 'Så här beräknas priset',
+          'explanationLink': 'Så här beräknas priset',
           'carExplanationName': 'Bil',
           'carExplanationDescription': ': Kilometer per år × 0,2 kg CO₂/km.',
           'electricityExplanationName': 'El',
@@ -647,6 +649,7 @@
           'mobilepay-link': 'Betal',
           'klimatrae-link': 'Betal',
           'explanationHeading': 'Slik beregnes prisen',
+          'explanationLink': 'Slik beregnes prisen',
           'carExplanationName': 'Bil',
           'carExplanationDescription': ': Kilometer per år × 0,2 kg CO₂/km.',
           'electricityExplanationName': 'Strøm',
@@ -755,6 +758,7 @@
           'mobilepay-link': 'Bezahlen',
           'klimatrae-link': 'Bezahlen',
           'explanationHeading': 'Wie wird der Preis berechnet',
+          'explanationLink': 'Wie wird der Preis berechnet',
           'carExplanationName': 'Auto',
           'carExplanationDescription': ': Kilometer pro Jahr × 0,2 kg CO₂/km.',
           'electricityExplanationName': 'Strom',
@@ -863,6 +867,7 @@
           'mobilepay-link': 'Maksaa',
           'klimatrae-link': 'Maksaa',
           'explanationHeading': 'Miten hinta lasketaan',
+          'explanationLink': 'Miten hinta lasketaan',
           'carExplanationName': 'Auto',
           'carExplanationDescription': ': Kilometrit vuodessa × 0,2 kg CO₂/km.',
           'electricityExplanationName': 'Sähkö',
@@ -943,6 +948,7 @@
           'mobilepay-link': 'Betal',
           'klimatrae-link': 'Betal',
           'explanationHeading': 'Sådan beregnes prisen',
+          'explanationLink': 'Sådan beregnes prisen',
           'carExplanationName': 'Bil',
           'carExplanationDescription': ': Kilometer pr. år × 0,2 kg CO₂/km.',
           'electricityExplanationName': 'El',
@@ -1163,7 +1169,7 @@
     }
 
     // Show explanation when clicked
-    document.getElementById('explanationHeading').addEventListener('click', () => {
+    document.getElementById('explanationLink').addEventListener('click', () => {
       document.getElementById('formContainer').style.display = 'none';
       document.getElementById('explanationContainer').style.display = 'block';
     });
