@@ -346,11 +346,11 @@
     const BASE_OTHER_EMISSIONS = 500;
 
     // Electric Heating defaults
-    let HEATING_DEFAULT_KWH = 4300;
-    let HEATING_DEFAULT_HOUSE_MIN_KWH = 3000;
-    let HEATING_DEFAULT_HOUSE_MAX_KWH = 5000;
-    let HEATING_DEFAULT_APPARTMENT_MIN_KWH = 2000;
-    let HEATING_DEFAULT_APPARTMENT_MAX_KWH = 3000;
+    let HEATING_DEFAULT_KWH = 17000;
+    let HEATING_DEFAULT_HOUSE_MIN_KWH = 15000;
+    let HEATING_DEFAULT_HOUSE_MAX_KWH = 22000;
+    let HEATING_DEFAULT_APPARTMENT_MIN_KWH = 10000;
+    let HEATING_DEFAULT_APPARTMENT_MAX_KWH = 14000;
 
     // CO₂-udledning pr. kWh for forskellige varmekilder
     const HEATING_EMISSIONS_GAS = 0.185;      // Naturgas
@@ -466,11 +466,11 @@
         ELECTRICITY_USE_DEFAULT_APPARTMENT_MAX_KWH = 5000;
 
         // Adjust CO2 emissions from heating for the UK
-        HEATING_DEFAULT_KWH = 4300;
-        HEATING_DEFAULT_HOUSE_MIN_KWH = 3000;
-        HEATING_DEFAULT_HOUSE_MAX_KWH = 5000;
-        HEATING_DEFAULT_APPARTMENT_MIN_KWH = 2000;
-        HEATING_DEFAULT_APPARTMENT_MAX_KWH = 3000;
+        HEATING_DEFAULT_KWH = 8000;
+        HEATING_DEFAULT_HOUSE_MIN_KWH = 6000;
+        HEATING_DEFAULT_HOUSE_MAX_KWH = 9000;
+        HEATING_DEFAULT_APPARTMENT_MIN_KWH = 3000;
+        HEATING_DEFAULT_APPARTMENT_MAX_KWH = 6000;
 
         // UK average diet includes meat 4 days a week
         document.getElementById('dietType').value = 'meat_4';
@@ -999,6 +999,9 @@
 
     // Set the default electricity use as default value
     document.getElementById('electricityUse').value = ELECTRICITY_USE_DEFAULT_KWH;
+
+    // Set the default heating use as default value
+    document.getElementById('heatingUse').value = HEATING_DEFAULT_KWH;
 
     // ********************************************************************************
 
